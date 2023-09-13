@@ -1,0 +1,25 @@
+<header>
+    <ul>
+        <li>
+            <a routerLink="/list-user"  routerLinkActive="active">User</a>
+        </li>
+        <li>
+            <a routerLink="/list-role" routerLinkActive="active">Role</a>
+        </li>
+        <li>
+            <a routerLink="/list-permission-group" routerLinkActive="active">permission Group</a>
+        </li>
+        <li>
+            <a routerLink="/list-permission-group-item" routerLinkActive="active">Permission Group Item</a>
+        </li>
+        <li>
+            <a routerLink="/list-role-permission" routerLinkActive="active"> Role Permission</a>
+        </li>
+
+        <li>
+            <a style="cursor:pointer" (click)="onLogOut()" > Logout</a>
+        </li>
+    </ul>
+</header>
+
+<router-outlet></router-outlet>

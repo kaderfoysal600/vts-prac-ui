@@ -1,0 +1,57 @@
+
+.section-1{
+    margin-top: 40px;
+    h1{
+      text-align: center;
+      margin-bottom: 15px;
+    }
+   }
+   .container{
+    max-width: 1250px;
+    margin: auto;
+   }
+   table {
+    border-collapse: collapse;
+    border-spacing: 0;
+    width: 100%;
+    border: 1px solid #f0f0f0;
+  
+  }
+  
+  
+   table tr {
+    border-bottom: 2px solid #f0f0f0;
+  }
+  
+   table th {
+    font-size: 14px;
+    font-weight: 600;
+    color: #1d1d1d;
+    padding: 15px 10px;
+    box-sizing: border-box;
+    text-align: center;
+    text-transform: capitalize;
+  }
+  
+   table td {
+    padding: 10px 10px;
+    box-sizing: border-box;
+    text-align: center;
+    font-size: 13px;
+  
+    .input-area {
+      .small-input {
+        width: 65px;
+      }
+  
+      .small-select {
+        width: 65px;
+      }
+    }
+  }
+  
+  .add-user{
+    padding: 5px 10px;
+    font-size: 16px;
+    cursor: pointer;
+  }

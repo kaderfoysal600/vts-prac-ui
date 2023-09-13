@@ -1,0 +1,28 @@
+<div class="section-1">
+
+    <button mat-raised-button color="primary" (click)="openEditControllerDialog()">Add New Role Permission</button>
+    <h1>Data of Role Permissions</h1>
+    <div class="container">
+      <table>
+        <tr>
+          <th>Permission</th>
+          <th>Role Id</th>
+          <th>Permission Group Id </th>
+
+          <th>Actions</th>
+        </tr>
+        <tr *ngFor="let data of allRolePermissions">
+          <td>{{data?.permission}}</td>
+          <td>{{data?.role_id}}</td>
+          <td>{{data?.permission_group_id}}</td>
+
+      
+          <td class="td-action">
+      <button (click)="openEditControllerDialog(data)">Edit</button>
+      <button (click)="deleteRolePermission(data.id)">Delete</button>
+          </td>
+        </tr>
+      </table>
+    </div>
+  </div>
+

@@ -1,0 +1,103 @@
+.container{
+    background-color: skyblue;
+    padding: 20px;
+}
+.login-main{
+    max-width: 650px;
+    margin: 0px auto 30px;
+    border-radius: 10px;
+    border: 1px solid rgb(236, 228, 228);
+    padding: 25px 30px;
+    text-align: center;
+    box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
+    background-color: #FFFF;
+    max-height: 400px;
+    overflow-y: scroll;
+}
+.login-from-inputs{
+    display: grid;
+    grid-template-columns: repeat(2,1fr);
+    grid-column-gap: 20px;
+    grid-row-gap: 10px;
+    margin-bottom: 10px;
+}
+
+::ng-deep .mat-data-input-field .mat-form-field-wrapper {
+    padding-bottom: 0px!important; 
+}
+
+
+::ng-deep .mat-radio-label-content {
+    padding-left: 5px;
+    padding-right: 10px!important;
+}
+
+::ng-deep input:-internal-autofill-selected {
+    appearance: menulist-button;
+    background-image: none !important;
+    background-color: transparent !important;
+    color: fieldtext !important;
+}
+
+
+
+// ::ng-deep snack-bar-container.mat-snack-bar-container.ng-tns-c150-8.ng-trigger.ng-trigger-state.red-snackbar.mat-snack-bar-center.ng-star-inserted {
+//     background: red!important;
+// }
+
+
+/* Style the file upload container */
+.file-up {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+  }
+  
+  /* Style the "Choose File" button */
+  .file-up button {
+    background-color: #007bff; /* Change this to your desired button color */
+    color: #fff;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    width: 100%;
+  }
+  
+  .file-up button:hover {
+    background-color: #0056b3; /* Change this to the hover color you prefer */
+  }
+  
+  /* Style the file input element (hidden) */
+  .file-up input[type="file"] {
+    display: none;
+  }
+  
+  /* Style the file name display */
+  .file-up .file-name {
+    font-size: 16px;
+    color: #333;
+    text-align: center;
+  }
+
+  .submit-area{
+    button{
+        max-width: 170px;
+        width: 100%;
+        background: linear-gradient(to right, blue, skyblue);
+        color: #FFFF;
+        font-size: 16px;
+    }
+  }
+
+
+
+
+  ::ng-deep .mat-form-field-flex > .mat-form-field-infix { padding: 0.5em 0px !important;}
+::ng-deep .mat-form-field-label-wrapper { top: -1.3em; }
+
+::ng-deep .mat-form-field-appearance-outline.mat-form-field-can-float.mat-form-field-should-float .mat-form-field-label {
+    transform: translateY(-1.1em) scale(.75);
+    width: 133.33333%;
+}

@@ -1,0 +1,94 @@
+<div class="dialog-container">
+    <div class="close">
+        <button mat-icon-button type="button" (click)="onClose()">
+            <mat-icon>close</mat-icon>
+        </button>
+    </div>
+
+    <div class="top-input-header">
+        <div class="title">
+            <h2> {{ userdata ? "Edit User" : "Add User" }}</h2>
+        </div>
+    </div>
+
+    <form #formElement="ngForm" [formGroup]="dataForm" (ngSubmit)="onSubmit()" autocomplete="off">
+        <div class="form-main">
+            <mat-form-field class="mat-data-input-field" appearance="outline">
+                <mat-label> first name</mat-label>
+                <input type="text" formControlName="first_name" matInput placeholder="Enter your first name...">
+                <mat-icon matSuffix>person</mat-icon>
+                <mat-error>This field is required</mat-error>
+            </mat-form-field>
+
+            <mat-form-field class="mat-data-input-field" appearance="outline">
+                <mat-label> last name</mat-label>
+                <input type="text" formControlName="last_name" matInput placeholder="Enter your last name...">
+                <mat-icon matSuffix>person</mat-icon>
+                <mat-error>This field is required</mat-error>
+            </mat-form-field>
+
+            <mat-form-field class="mat-data-input-field" appearance="outline">
+                <mat-label>mobile number</mat-label>
+                <input type="number" formControlName="mobile" matInput placeholder="Enter your mobile number...">
+                <mat-icon matSuffix>person</mat-icon>
+                <mat-error>This field is required</mat-error>
+            </mat-form-field>
+
+
+            <mat-form-field *ngIf="!userdata" class="mat-data-input-field" appearance="outline">
+                <mat-label>email</mat-label>
+                <input type="email" formControlName="email" matInput placeholder="Enter your email...">
+                <mat-icon matSuffix>person</mat-icon>
+                <mat-error>This field is required</mat-error>
+            </mat-form-field>
+
+
+            <mat-form-field class="mat-data-input-field" appearance="outline">
+                <mat-label>address</mat-label>
+                <input type="text" formControlName="address" matInput placeholder="Enter your address...">
+                <mat-icon matSuffix>person</mat-icon>
+                <mat-error>This field is required</mat-error>
+            </mat-form-field>
+
+
+            <!-- <mat-form-field >
+        <mat-label>Select Role</mat-label>
+        <mat-select  formControlName="role" name="role">
+            <mat-option *ngFor="let item of allRoles" [value]="item.id">
+                {{item.name}}
+            </mat-option>
+        </mat-select>
+    </mat-form-field>  -->
+
+            <mat-form-field>
+                <mat-label>Select Role</mat-label>
+                <mat-select formControlName="role_id" name="role_id">
+                    <mat-option *ngFor="let item of allRoles" [value]="item.id">
+                        {{item.name}}
+                    </mat-option>
+                </mat-select>
+            </mat-form-field>
+
+
+
+            <mat-radio-group aria-labelledby="example-radio-group-label" class="example-radio-group"
+                formControlName="gender">
+                <mat-label>Gender : </mat-label>
+                <mat-radio-button class="example-radio-button" *ngFor="let item of allGender" [value]="item">
+                    {{item}}
+                </mat-radio-button>
+            </mat-radio-group>
+
+            <input type="file" (change)="onFileSelected($event)" accept="image/*" />
+
+            <mat-form-field *ngIf="!userdata" class="mat-data-input-field" appearance="outline">
+                <input formControlName="password" type="password" matInput placeholder="Enter your password...">
+                <mat-icon matSuffix>lock</mat-icon>
+                <mat-error>This field is required</mat-error>
+            </mat-form-field>
+        </div>
+        <button mat-raised-button color="primary" type="submit" placeholder="Enter role name">
+            {{ userdata ? "Update" : "Add" }}
+        </button>
+    </form>
+</div>

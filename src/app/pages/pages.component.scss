@@ -1,0 +1,40 @@
+header {
+    background-color: #0F0E24;
+    height: 60px;
+    background-color: #0F0E24;
+    height: 60px;
+    position: sticky;
+    top: 0;
+    left: 0;
+    width: 100%;
+
+    ul {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 15px;
+        list-style: none;
+        margin: 0px;
+        padding: 20px 0px 0px;
+
+        li {
+            a {
+                color: #FFFF;
+                padding: 5px 10px;
+                text-decoration: none;
+                font-size: 16px;
+                border-radius: 3px;
+                transition: all 0.3s linear;
+
+                &:hover {
+                    color: #FE013E;
+                }
+            }
+        }
+    }
+}
+
+.active {
+    background-color: #FFFF;
+    color: #FE013E !important;
+}

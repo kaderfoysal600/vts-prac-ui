@@ -1,0 +1,43 @@
+<div class="dialog-container">
+    <div class="close">
+        <button mat-icon-button type="button" (click)="onClose()">
+            <mat-icon>close</mat-icon>
+        </button>
+    </div>
+
+    <div class="top-input-header">
+        <div class="title">
+            <h2> {{ permissionGroupData ? "Edit Permission Group" : "Add Permission Group" }}</h2>
+        </div>
+    </div>
+
+    <form #formElement="ngForm" [formGroup]="dataForm" (ngSubmit)="onSubmit()" autocomplete="off">
+        <div class="form-main">
+            <mat-form-field class="mat-data-input-field" appearance="outline">
+                <mat-label>PermissionGroup name</mat-label>
+                <input type="text" formControlName="name" matInput placeholder="Enter PermissionGroup name...">
+                <mat-icon matSuffix>person</mat-icon>
+                <mat-error>This field is required</mat-error>
+            </mat-form-field>
+
+            <mat-form-field class="mat-data-input-field" appearance="outline">
+                <mat-label>Description</mat-label>
+                <input type="text" formControlName="description" matInput placeholder="Enter Description...">
+                <mat-icon matSuffix>person</mat-icon>
+                <mat-error>This field is required</mat-error>
+            </mat-form-field>
+
+            <mat-form-field>
+                <mat-label>Status</mat-label>
+                <mat-select formControlName="status" name="status">
+                    <mat-option *ngFor="let item of allStatus" [value]="item.viewValue">
+                        {{item.viewValue}}
+                    </mat-option>
+                </mat-select>
+            </mat-form-field>
+        </div>
+        <button mat-raised-button color="primary" type="submit" >
+            {{ permissionGroupData ? "Update" : "Add" }}
+        </button>
+    </form>
+</div>

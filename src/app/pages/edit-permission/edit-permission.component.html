@@ -1,0 +1,16 @@
+<section class="example-section" [formGroup]="taskForm">
+  <span class="example-list-section">
+    <mat-checkbox class="example-margin" [formControlName]="'completed'" >
+      {{ taskForm.get('name').value }}
+    </mat-checkbox>
+  </span>
+  <span class="example-list-section">
+    <!-- <ul>
+      <li *ngFor="let subtask of taskForm.get('subtasks'); let i = index" [formGroupName]="i">
+        <mat-checkbox [formControlName]="'completed'" [color]="subtask.get('color').value">
+          {{ subtask.get('name').value }}
+        </mat-checkbox>
+      </li>
+    </ul> -->
+  </span>
+</section>

@@ -1,0 +1,18 @@
+.container{
+    max-width: 750px;
+    margin: 40px auto 0px;
+}
+
+.login-form{
+    display: grid;
+    grid-template-columns: repeat(2,1fr);
+    gap: 20px;
+    
+}
+
+::ng-deep input:-internal-autofill-selected {
+    appearance: menulist-button;
+    background-image: none !important;
+    background-color: transparent !important;
+    color: fieldtext !important;
+}

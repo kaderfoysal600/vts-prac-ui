@@ -1,0 +1,35 @@
+<p>role works!</p>
+<div class="container">
+    <div class="login">
+      <h1>Login Here</h1>
+      <form class="login-form" [formGroup]="roleForm" (ngSubmit)="addRole()">
+        <mat-form-field class="mat-data-input-field" appearance="outline">
+          <!-- <mat-label>Username</mat-label> -->
+          <input type="text" formControlName="name" matInput placeholder="Enter role name...">
+          <mat-icon matSuffix>person</mat-icon>
+          <mat-error>This field is required</mat-error>
+        </mat-form-field>
+  
+        <mat-form-field class="mat-data-input-field" appearance="outline">
+          <!-- <mat-label>Username</mat-label> -->
+          <input type="text" formControlName="description" matInput placeholder="Enter Description...">
+          <mat-icon matSuffix>person</mat-icon>
+          <mat-error>This field is required</mat-error>
+        </mat-form-field>
+  
+        <mat-form-field>
+          <mat-label>Status</mat-label>
+          <mat-select [(ngModel)]="selectedValue2" formControlName="status" name="food">
+            <mat-option *ngFor="let food of foods" [value]="food.value">
+              {{food.viewValue}}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+  
+        <div class="submit-area">
+          <button class="btn-login" mat-raised-button color="primary" type="submit">Login</button>
+        </div>
+  
+      </form>
+    </div>
+  </div>

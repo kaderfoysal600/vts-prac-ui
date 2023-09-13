@@ -1,0 +1,30 @@
+<div class="section-1">
+
+  <div class="container">
+    <button  class="add-user" mat-raised-button color="accent" (click)="openEditControllerDialog()">Add New Role</button>
+    <h1>Data of All Role</h1>
+    <table>
+      <tr>
+        <th>Name </th>
+        <th>Role Id</th>
+        <th>Description</th>
+        <th>Status</th>
+        <th>Actions</th>
+      </tr>
+      <tr *ngFor="let data of allRole">
+        <td>{{data?.name}}</td>
+        <td>{{data?.id}}</td>
+        <td>{{data?.description}}</td>
+        <td>{{data?.status}}</td>
+
+        <td class="td-action">
+          <a (click)="addPermission(data)">
+            <button>Permission</button>
+          </a>
+          <button (click)="openEditControllerDialog(data)">Edit</button>
+          <button (click)="deleteRole(data.id)">Delete</button>
+        </td>
+      </tr>
+    </table>
+  </div>
+</div>

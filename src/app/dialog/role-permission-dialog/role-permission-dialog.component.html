@@ -1,0 +1,47 @@
+<div class="dialog-container">
+    <div class="close">
+        <button mat-icon-button type="button" (click)="onClose()">
+            <mat-icon>close</mat-icon>
+        </button>
+    </div>
+
+    <div class="top-input-header">
+        <div class="title">
+            <h2> {{ userdata ? "Edit Role Permission" : "Add Role Permission" }}</h2>
+        </div>
+    </div>
+
+    <form #formElement="ngForm" [formGroup]="dataForm" (ngSubmit)="onSubmit()" autocomplete="off">
+        <div class="form-main">
+
+            <mat-form-field class="mat-data-input-field" appearance="outline">
+                <mat-label>Permission</mat-label>
+                <input type="text" formControlName="permission" matInput placeholder="Enter Permission">
+                <mat-icon matSuffix>person</mat-icon>
+                <mat-error>This field is required</mat-error>
+            </mat-form-field>
+
+            
+            <mat-form-field>
+                <mat-label>Select Role</mat-label>
+                <mat-select formControlName="role_id" name="role_id">
+                    <mat-option *ngFor="let item of allRole" [value]="item.id">
+                        {{item.name}}
+                    </mat-option>
+                </mat-select>
+            </mat-form-field>
+
+            <mat-form-field *ngIf="!userdata">
+                <mat-label>Select Permission Group</mat-label>
+                <mat-select formControlName="permission_group_id" name="permission_group_id">
+                    <mat-option *ngFor="let item of allPermissionGroup" [value]="item.id">
+                        {{item.name}}
+                    </mat-option>
+                </mat-select>
+            </mat-form-field>
+        </div>
+        <button mat-raised-button color="primary" type="submit" placeholder="Enter role name">
+            {{ userdata ? "Update" : "Add" }}
+        </button>
+    </form>
+</div>

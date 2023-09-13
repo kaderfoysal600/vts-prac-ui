@@ -1,0 +1,88 @@
+<div class="container">
+  <div class="login-main">
+    <div class="login">
+      <h1>Add User</h1>
+
+      <form class="login-form" [formGroup]="loginForm" (ngSubmit)="onLogin()">
+        <div class="login-from-inputs">
+          <mat-form-field class="mat-data-input-field" appearance="outline">
+            <mat-label>First Name</mat-label>
+            <input type="text" formControlName="first_name" matInput placeholder="Enter your first name...">
+            <mat-icon matSuffix>person</mat-icon>
+            <mat-error>This field is required</mat-error>
+          </mat-form-field>
+
+          <mat-form-field class="mat-data-input-field" appearance="outline">
+            <mat-label>Last Name</mat-label>
+            <input type="text" formControlName="last_name" matInput placeholder="Enter your last name...">
+            <mat-icon matSuffix>person</mat-icon>
+            <mat-error>This field is required</mat-error>
+          </mat-form-field>
+
+          <mat-form-field class="mat-data-input-field" appearance="outline">
+            <mat-label>Number</mat-label>
+            <input type="number" formControlName="mobile" matInput placeholder="Enter your mobile number...">
+            <mat-icon matSuffix>person</mat-icon>
+            <mat-error>This field is required</mat-error>
+          </mat-form-field>
+
+
+          <mat-form-field class="mat-data-input-field" appearance="outline">
+            <mat-label>Email</mat-label>
+            <input type="email" formControlName="email" matInput placeholder="Enter your email...">
+            <mat-icon matSuffix>person</mat-icon>
+            <mat-error>This field is required</mat-error>
+          </mat-form-field>
+
+
+          <mat-form-field class="mat-data-input-field" appearance="outline">
+            <mat-label>Address</mat-label>
+            <input type="text" formControlName="address" matInput placeholder="Enter your address...">
+            <mat-icon matSuffix>person</mat-icon>
+            <mat-error>This field is required</mat-error>
+          </mat-form-field>
+
+
+          <mat-form-field>
+            <mat-label>Select Role</mat-label>
+            <mat-select [(ngModel)]="selectedValue" formControlName="role_id" name="role_id">
+              <mat-option *ngFor="let item of allRoles" [value]="item.id">
+                {{item.name}}
+              </mat-option>
+            </mat-select>
+          </mat-form-field>
+
+          <mat-radio-group aria-labelledby="example-radio-group-label" class="example-radio-group"
+            formControlName="gender">
+            <mat-label>Gender : </mat-label>
+
+            <mat-radio-button class="example-radio-button" *ngFor="let item of allGender" [value]="item">
+              {{item}}
+            </mat-radio-button>
+          </mat-radio-group>
+
+          <!-- <input type="file"  (change)="onFileSelected($event)" accept="image/*"/> -->
+
+          <div class="file-up">
+            <button type="button" mat-raised-button (click)="fileInput.click()">Upload Image</button>
+            <input hidden (change)="onFileSelected($event)" #fileInput type="file">
+            <span class="file-name">{{selectedFile?.name}}</span>
+          </div>
+
+
+          <mat-form-field class="mat-data-input-field" appearance="outline">
+            <mat-label>Password</mat-label>
+            <input formControlName="password" type="password" matInput placeholder="Enter your password...">
+            <mat-icon matSuffix>lock</mat-icon>
+            <mat-error>This field is required</mat-error>
+          </mat-form-field>
+        </div>
+
+        <div class="submit-area">
+          <button class="btn-login" mat-raised-button type="submit">Submit</button>
+        </div>
+
+      </form>
+    </div>
+  </div>
+</div>

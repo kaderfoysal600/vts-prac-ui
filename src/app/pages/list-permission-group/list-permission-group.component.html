@@ -1,0 +1,29 @@
+<div class="section-1">
+
+    <button mat-raised-button color="accent" (click)="openEditControllerDialog()">Add New Permisssion Group</button>
+    <h1>Data of All Permission Group</h1>
+    <div class="container">
+        <table>
+            <tr>
+                <th>Id</th>
+                <th>Name </th>
+                <th>Description</th>
+                <th>Status</th>
+                <th>Created By</th>
+                <th>Actions</th>
+            </tr>
+            <tr *ngFor="let data of allPermissionGroup">
+                <td>{{data.id}}</td>
+                <td>{{data?.name}}</td>
+                <td>{{data?.description}}</td>
+                <td>{{data?.status}}</td>
+                <td>{{data?.created_by}}</td>
+
+                <td class="td-action">
+                    <button (click)="openEditControllerDialog(data)">Edit</button>
+                    <button (click)="deletePermissionGroup(data.id)">Delete</button>
+                </td>
+            </tr>
+        </table>
+    </div>
+</div>

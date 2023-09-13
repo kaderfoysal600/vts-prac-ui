@@ -1,0 +1,38 @@
+
+<div class="container">
+    <div class="login">
+      <h1>Add Permission Group Item</h1>
+  
+      <form class="login-form" [formGroup]="rolePermissionForm" (ngSubmit)="AddRolePermission()">
+
+        <mat-form-field>
+          <mat-label>Select permissionGroup</mat-label>
+          <mat-select formControlName="permissionGroupId" name="permissionGroupId">
+            <mat-option *ngFor="let item of allPermissionGroup" [value]="item.id">
+              {{item.name}}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+        <mat-form-field>
+            <mat-label>Select Role</mat-label>
+            <mat-select formControlName="roleId" name="roleId">
+              <mat-option *ngFor="let item of allRole" [value]="item.id">
+                {{item.name}}
+              </mat-option>
+            </mat-select>
+          </mat-form-field>
+
+          <mat-form-field class="mat-data-input-field" appearance="outline">
+            <!-- <mat-label>Username</mat-label> -->
+            <input type="text" formControlName="permission" matInput placeholder="Enter Permission Name...">
+            <mat-icon matSuffix>person</mat-icon>
+            <mat-error>This field is required</mat-error>
+          </mat-form-field>
+
+        <div class="submit-area">
+          <button class="btn-login" mat-raised-button color="primary" type="submit">Submit</button>
+        </div>
+  
+      </form>
+    </div>
+  </div>
