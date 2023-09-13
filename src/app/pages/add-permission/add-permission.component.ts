@@ -153,15 +153,25 @@ export class AddPermissionComponent implements OnInit {
 
   checkAllPermissions(event: any, item: any) {
     console.log('item', item);
-    const checkArray: FormArray = this.form.get('checkArray1') as FormArray;
-    if (event.checked) {
-      console.log('checked')
-      checkArray.push(new FormControl(event.source.value));
-    }
-    else {
-      let index = checkArray.controls.findIndex(x => x.value == name)
-      checkArray.removeAt(index);
-    }
+    console.log('event', event);
+  
+
+    item.checked = event.checked;
+    item.permission_group_items.forEach(val => {
+      val.isChecked = event.checked;
+      // Optionally, you can call your getCheckedData function here if needed.
+      // this.getCheckedData({ checked: event.checked }, val);
+      const checkArray: FormArray = this.form.get('checkArray1') as FormArray;
+      if (event.checked) {
+        console.log('checked')
+        checkArray.push(new FormControl(event.source.value));
+      }
+      else {
+        let index = checkArray.controls.findIndex(x => x.value == name)
+        checkArray.removeAt(index);
+      }
+    });
+
     this.form.patchValue({
       permission_group_id: item.id,
       role_id: this.Id

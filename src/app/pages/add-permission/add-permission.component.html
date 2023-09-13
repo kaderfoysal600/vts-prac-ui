@@ -11,7 +11,7 @@
 
 
   <ng-container *ngFor="let item of allPermissionGroup; let i = index">
-    <mat-checkbox  [value]="item.name"  formControlName="permission_group_id" (change)="checkAllPermissions($event, item)">
+    <mat-checkbox  [checked]="item.checked" [value]="item.name"  (change)="checkAllPermissions($event, item)">
       <h1>{{ item.name }}</h1>
     </mat-checkbox>
     <div>
