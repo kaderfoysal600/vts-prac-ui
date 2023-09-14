@@ -1,5 +1,9 @@
 <form action="" [formGroup]="form" (ngSubmit)="submitForm()">
-<h2>Add Role Permission to - (  {{singleRole?.name}} )</h2>
+  <h2>Add Role Permission to - ( {{singleRole?.name}} )
+     <mat-checkbox [(ngModel)]="checkAll"
+      [ngModelOptions]="{standalone: true}" (change)="checkAllP()">
+      <h1>Check All</h1>
+    </mat-checkbox></h2>
   <!-- <mat-form-field class="role">
     <mat-label>Select Role</mat-label>
     <mat-select [(ngModel)]="selectedValue" formControlName="role_id" name="role_id">
@@ -8,16 +12,16 @@
       </mat-option>
     </mat-select>
   </mat-form-field> -->
-
-
   <ng-container *ngFor="let item of allPermissionGroup; let i = index">
-    <mat-checkbox  [checked]="item.checked" [value]="item.name"  (change)="checkAllPermissions($event, item)">
+    <mat-checkbox [(ngModel)]="item.checked" [ngModelOptions]="{standalone: true}" [value]="item.name"
+      (change)="checkAllPermissions($event, item)">
       <h1>{{ item.name }}</h1>
     </mat-checkbox>
     <div>
-      <mat-checkbox *ngFor="let val of item.permission_group_items" [value]="val"
-      [checked]="item.checked" (change)="getCheckedData($event, val)">
-        <p>{{ val.name }}</p>
+      <!-- (change)="getCheckedData($event, val)" -->
+      <mat-checkbox *ngFor="let val of item.permission_group_items" [value]="val" [(ngModel)]="val.isChecked"
+        [ngModelOptions]="{standalone: true}" [checked]="val.isChecked">
+        <p>{{ val.itemData.name }}</p>
       </mat-checkbox>
     </div>
   </ng-container>

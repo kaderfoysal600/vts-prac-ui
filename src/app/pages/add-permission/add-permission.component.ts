@@ -12,6 +12,7 @@ import { AuthService } from 'src/app/service/auth.service';
 export class AddPermissionComponent implements OnInit {
   selectedValue: string;
   allRoles: any;
+  checkAll: false;
   checkedData: any;
   allRole: any;
   singleRole: any;
@@ -19,7 +20,7 @@ export class AddPermissionComponent implements OnInit {
   allPermissionGroupItem: any;
   form: FormGroup;
   Id: any;
-
+  checked = false;
   private subDataOne: Subscription;
   private subDataTwo: Subscription;
   constructor(
@@ -34,20 +35,19 @@ export class AddPermissionComponent implements OnInit {
     this.getAllPermissionGroupItem()
     this.getAllPermissionGroup()
     this._route.paramMap.subscribe(params => {
-      this.Id = params.get("id");
+      this.Id = parseInt(params.get("id"))
       console.log('Id', this.Id);
-
     });
     this.form = this.fb.group({
-      checkArray: this.fb.array([]),
+      // checkArray: this.fb.array([]),
       checkArray1: this.fb.array([]),
-      role_id: null,
-      permission_group_id: null
-
+      role_id: [""],
+      permission_group_id: ['', {}],
+      permission: ['', {}],
     })
     this.getRoleData()
     this.getRoleById()
-
+    this.getAllPermission()
   }
 
 
@@ -118,7 +118,7 @@ export class AddPermissionComponent implements OnInit {
             // console.log('item2.permission_group_id', item2.permission_group_id)
             if (item.id == item2.permission_group_id) {
 
-              item['permission_group_items'].push(item2.name)
+              item['permission_group_items'].push(item2)
 
             }
           })
@@ -134,9 +134,14 @@ export class AddPermissionComponent implements OnInit {
     console.log('allPermissionGroup', this.allPermissionGroup);
 
     this.allPermissionGroup.forEach(item => {
-      item.permission_group_items = item.permission_group_items?.map(val => ({ name: val, isChecked: false }));
+      item.permission_group_items = item.permission_group_items?.map(val =>
+        ({ itemData: val, isChecked: false })
+      );
     });
   }
+
+
+
 
   submitForm() {
     console.log("this.form.value = ", this.form.value)
@@ -146,7 +151,6 @@ export class AddPermissionComponent implements OnInit {
       console.log('Invalid Input field!');
       return;
     }
-
   }
 
 
@@ -154,43 +158,94 @@ export class AddPermissionComponent implements OnInit {
   checkAllPermissions(event: any, item: any) {
     console.log('item', item);
     console.log('event', event);
-  
-
     item.checked = event.checked;
-    item.permission_group_items.forEach(val => {
-      val.isChecked = event.checked;
-      // Optionally, you can call your getCheckedData function here if needed.
-      // this.getCheckedData({ checked: event.checked }, val);
-      const checkArray: FormArray = this.form.get('checkArray1') as FormArray;
-      if (event.checked) {
-        console.log('checked')
-        checkArray.push(new FormControl(event.source.value));
-      }
-      else {
-        let index = checkArray.controls.findIndex(x => x.value == name)
-        checkArray.removeAt(index);
-      }
-    });
-
     this.form.patchValue({
-      permission_group_id: item.id,
       role_id: this.Id
     })
-  }
+    const checkArray: FormArray = this.form.get('checkArray1') as FormArray;
+    if (event.checked) {
+      this.form.get('permission_group_id').setValue(item.id);
+      checkArray.push(new FormControl(item));
+      item.permission_group_items.forEach(val => {
+        val.isChecked = event.checked;
+        if (val.isChecked) {
+          console.log("aaaaaa", val)
+          this.form.get('permission').setValue(val?.itemData?.permission);
+          this.submitForm();
+          this.authService.addRolePermission(this.form.value).subscribe({
+            next: (res) => {
+              if (res) {
+                console.log('res from api', res)
+                console.log('role permission added successfully')
+
+              } else {
+                console.log('Error! Please try again.')
+              }
+            },
+            error: (err) => {
+              console.log(err)
+            }
+          })
 
 
-  getCheckedData(e: any, name: string) {
-    console.log(e)
-    const checkArray: FormArray = this.form.get('checkArray') as FormArray;
-    if (e.checked) {
-      console.log(name, 'checked')
-      checkArray.push(new FormControl(e.source.value));
+        }
+        
+        else if (!val.isChecked){
+          console.log('value unchecked', val.isChecked)
+          this.authService.deleteRolePermission(val?.itemData.id).subscribe({
+            next : (res) => {
+              if(res){
+                console.log("deleted Successfully")
+              }
+            },
+            error : (err)=> {
+
+            }
+          })
+        }
+        // this.getCheckedData({ checked: event.checked }, val);
+      });
     }
     else {
       let index = checkArray.controls.findIndex(x => x.value == name)
       checkArray.removeAt(index);
+      item.permission_group_items.forEach(val => {
+        val.isChecked = event.checked;
+        console.log('val?.itemData.id', val?.itemData.id)
+        this.authService.deleteRolePermission(val?.itemData.id).subscribe({
+          next : (res) => {
+            if(res){
+              console.log('delete response', res);
+              console.log("deleted Successfully")
+            }
+          },
+          error : (err)=> {
+
+          }
+        })
+        // this.getCheckedData({ checked: event.checked }, val);
+      });
+      
     }
+
+
   }
+
+
+  // getCheckedData(e: any, name: string) {
+  //   console.log('eeeeee', e)
+  //   console.log(e)
+  //   const checkArray: FormArray = this.form.get('checkArray') as FormArray;
+  //   if (e.isChecked) {
+  //     console.log(name, 'checkedhhhhhhhhhh')
+  //     checkArray.push(new FormControl(e.source.value));
+  //   }
+  //   else {
+  //     let index = checkArray.controls.findIndex(x => x.value == name)
+  //     checkArray.removeAt(index);
+
+  //   }
+  // }
 
 
 
@@ -208,6 +263,32 @@ export class AddPermissionComponent implements OnInit {
   //   }
 
   // }
+
+
+  checkAllP() {
+    console.log("Check All Permissions");
+    console.log(this.checkedData);
+
+  }
+
+
+
+  getAllPermission() {
+    this.subDataOne = this.authService.getAllRolePermission().subscribe({
+      next: (res) => {
+        if (res) {
+          // this.allRoles = res
+          console.log('role permission', res)
+
+        } else {
+          console.log('Error! Please try again.')
+        }
+      },
+      error: (err) => {
+        console.log(err)
+      }
+    })
+  }
 
 }
 
