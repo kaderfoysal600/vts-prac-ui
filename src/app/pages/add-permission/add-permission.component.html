@@ -12,17 +12,19 @@
       </mat-option>
     </mat-select>
   </mat-form-field> -->
-  <ng-container *ngFor="let item of allPermissionGroup; let i = index">
+  <ng-container *ngFor="let item of getCheckedData; let i = index">
     <mat-checkbox [(ngModel)]="item.checked" [ngModelOptions]="{standalone: true}" [value]="item.name"
       (change)="checkAllPermissions($event, item)">
-      <h1>{{ item.name }}</h1>
+      <h1>{{ item?.name }}</h1>
     </mat-checkbox>
     <div>
       <!-- (change)="getCheckedData($event, val)" -->
       <mat-checkbox *ngFor="let val of item.permission_group_items" [value]="val" [(ngModel)]="val.isChecked"
         [ngModelOptions]="{standalone: true}" [checked]="val.isChecked">
-        <p>{{ val.itemData.name }}</p>
+        <p>{{ val?.itemData?.permission }}</p>
+        <p>{{val?.itemData?.id}}</p>
       </mat-checkbox>
+
     </div>
   </ng-container>
   <button type="submit"> Submit</button>
