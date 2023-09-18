@@ -54,7 +54,6 @@ export class AddPermissionComponent implements OnInit {
     this.getAllPermissionGroup()
     this._route.paramMap.subscribe(params => {
       this.Id = parseInt(params.get("id"))
-      console.log('Id', this.Id);
     });
     this.form = this.fb.group({
       // checkArray: this.fb.array([]),
@@ -75,7 +74,6 @@ export class AddPermissionComponent implements OnInit {
         if (res) {
           this.allRole = res;
           this.singleRole = this.allRole.find(role => role.id == this.Id)
-          console.log('singleUser', this.singleRole)
           // this.setUser(this.singleUser);
         } else {
           console.log('Error! Please try again.')
@@ -92,7 +90,7 @@ export class AddPermissionComponent implements OnInit {
       next: (res) => {
         if (res) {
           this.allRoles = res
-          console.log(res)
+
 
         } else {
           console.log('Error! Please try again.')
@@ -113,7 +111,6 @@ export class AddPermissionComponent implements OnInit {
           this.allPermissionGroupItem = res
           this.getAllPermissionGroup()
 
-          console.log(res)
 
         } else {
           console.log('Error! Please try again.')
@@ -127,7 +124,6 @@ export class AddPermissionComponent implements OnInit {
   private getAllPermissionGroup() {
     this.authService.getAllPermissionGroup().subscribe({
       next: (res: any) => {
-        console.log(res);
         this.allPermissionGroup = res;
         this.allPermissionGroup?.forEach((item: any) => {
           item['permission_group_items'] = []
@@ -180,43 +176,65 @@ export class AddPermissionComponent implements OnInit {
 
         if (m.checked) {
           itemAdd = true;
+          m.permission_group_items.forEach(a => {
+
+            // if(!a.isChecked){
+            //   this.authService.deleteRolePermission(a.itemData.id).subscribe({
+
+            //     next: (res) => {
+            //       if (res) {
+            //         console.log("deleted Successfully")
+            //       }
+            //     },
+            //     error: (err) => {
+
+            //     }
+            //   })
+            // }
+          })
         } else {
-          deleteId = m?.itemData.id;
-          console.log('m?.itemData.id', m?.itemData.id)
+
+          deleteId = m?.itemData?.id;
+          console.log('m?.itemData.id', m?.itemData?.id)
           itemAdd = false;
         }
 
 
 
       })
+      if (itemAdd) {
 
-      this.authService.addRolePermission(this.checkedData).subscribe({
-        next: (res) => {
-          if (res) {
-            console.log('res from api', res)
-            console.log('role permission added successfully')
-
-          } else {
-            console.log('Error! Please try again.')
-          }
-        },
-        error: (err) => {
-          console.log(err)
-        }
-      })
-
-      if (!itemAdd) {
-        this.authService.deleteRolePermission(deleteId).subscribe({
-
+        this.authService.addRolePermission(this.checkedData).subscribe({
           next: (res) => {
             if (res) {
-              console.log("deleted Successfully")
+              console.log('res from api', res)
+              console.log('role permission added successfully')
+
+            } else {
+              console.log('Error! Please try again.')
             }
           },
           error: (err) => {
-
+            console.log(err)
           }
         })
+
+
+      }
+
+
+      if (!itemAdd) {
+        // this.authService.deleteRolePermission(deleteId).subscribe({
+
+        //   next: (res) => {
+        //     if (res) {
+        //       console.log("deleted Successfully")
+        //     }
+        //   },
+        //   error: (err) => {
+
+        //   }
+        // })
       }
 
       // this.getAllPermission()
@@ -240,25 +258,7 @@ export class AddPermissionComponent implements OnInit {
       item.permission_group_items.forEach(val => {
         val.isChecked = event.checked;
         if (val.isChecked) {
-          console.log("aaaaaa", val)
           this.form.get('permission').setValue(val?.itemData?.permission);
-          // this.submitForm();
-          // this.authService.addRolePermission(this.form.value).subscribe({
-          //   next: (res) => {
-          //     if (res) {
-          //       console.log('res from api', res)
-          //       console.log('role permission added successfully')
-
-          //     } else {
-          //       console.log('Error! Please try again.')
-          //     }
-          //   },
-          //   error: (err) => {
-          //     console.log(err)
-          //   }
-          // })
-
-
         }
 
         else if (!val.isChecked) {
@@ -283,18 +283,6 @@ export class AddPermissionComponent implements OnInit {
       item.permission_group_items.forEach(val => {
         val.isChecked = event.checked;
         console.log('val?.itemData.id', val?.itemData.id)
-        this.authService.deleteRolePermission(val?.itemData.id).subscribe({
-          next: (res) => {
-            if (res) {
-              console.log('delete response', res);
-              console.log("deleted Successfully")
-            }
-          },
-          error: (err) => {
-
-          }
-        })
-        // this.getCheckedData({ checked: event.checked }, val);
       });
 
     }
@@ -343,80 +331,14 @@ export class AddPermissionComponent implements OnInit {
   }
 
 
-
-  // getAllPermission() {
-  //   this.subDataOne = this.authService.getAllRolePermission().subscribe({
-  //     next: (res) => {
-  //       if (res) {
-  //         // Log the received data for debugging purposes
-  //         console.log('role permission', res);
-
-  //         // Iterate through each item in allPermissionGroup and update it
-  //         this.allPermissionGroup?.forEach((item: any) => {
-
-  //           res['data'].map((m) => {
-  //             console.log('item...', item.id);
-  //             console.log('m.permission_group_id', m.permission_group_id)
-  //             if (item.id === m.permission_group_id) {
-  //               item.checked = true;
-
-  //               let permissionIndex = 0;
-  //               // Iterate through each permission_group_items and update them
-
-  //               item['permission_group_items'].map((elm) => {
-
-  //                 console.log('elm', elm);
-  //                 console.log('m', m)
-  //                 if (elm?.itemData?.permission === res['data'][permissionIndex]?.permission) {
-  //                   console.log("res['data'][permissionIndex]?.permission", res['data'][permissionIndex]?.permission)
-
-  //                   elm.isChecked = true;
-  //                   elm['itemData'] = res['data'][permissionIndex];
-  //                   permissionIndex++;
-
-  //                 } else {
-  //                   elm.isChecked = false;
-  //                 }
-
-
-
-  //               });
-
-  //               // Log the updated permission_group_items for debugging
-  //               console.log('item.permission_group_items', item?.permission_group_items);
-  //             } else {
-  //               item.checked = false
-  //             }
-  //           });
-  //         });
-
-  //         // Set this.getCheckedData to the updated allPermissionGroup
-  //         this.getCheckedData = this.allPermissionGroup;
-
-  //         // Log the updated data for debugging
-  //         console.log('this.getCheckedData', this.getCheckedData);
-  //       } else {
-  //         console.log('Error! Please try again.');
-  //       }
-  //     },
-  //     error: (err) => {
-  //       console.log(err);
-  //     }
-  //   });
-  // }
-
-
-
-
-
-
-
   getAllPermission() {
+
     this.subDataOne = this.authService.getAllRolePermission().subscribe({
       next: (res) => {
         if (res) {
           console.log('role permission', res);
           this.anotherFunc(res)
+          // this.staticDataFunc(res)
           console.log('this.getCheckedData', this.getCheckedData);
         } else {
           console.log('Error! Please try again.');
@@ -428,60 +350,101 @@ export class AddPermissionComponent implements OnInit {
     });
   }
 
+  // anotherFunc(res) {
+  //   res['data'].map((m) => {
+  //     this.allPermissionGroup?.forEach((item: any) => {
+  //       console.log('item', item)
+  //       if(item.id === m.permission_group_id){
+  //         item.checked = true;
+  //         let permissionIndex = 0;
+  //         item['permission_group_items'].map((elm) => {
+
+  //           let childCheckd = res['data'].some(e => {
+  //             return e?.permission === elm?.itemData?.permission
+  //           })
+
+  //           if (childCheckd) {
+  //             elm.isChecked = true;
+  //             elm['itemData'] = res['data'][permissionIndex];
+  //             permissionIndex++;
+
+  //           } else if (!childCheckd) {
+  //             elm.isChecked = false;
+  //           }
+  //         });
+  //       }
+
+  //       // if (parentBoolean) {
+
+
+
+  //       // } else if (!parentBoolean) {
+  //       //   item.checked = false
+  //       // }
+  //     });
+  //   });
+  //   this.getCheckedData = this.allPermissionGroup;
+
+  //   this.form.value.checkArray1= this.getCheckedData
+  //   console.log('this.form.value', this.form.value)
+  // }
+
+
+
+
+
+
+
   anotherFunc(res) {
-    // this.allPermissionGroup?.forEach((item: any) => {
+    for (const m of res['data']) {
 
-    // });
-
-
-    res['data'].map((m) => {
-      let parentBoolean = this.allPermissionGroup?.some((item) => {
-        return item.id === m.permission_group_id
-      })
-      console.log('parentBoolean', parentBoolean)
-
-      this.allPermissionGroup?.forEach((item: any) => {
-        console.log('item...', item.id);
-        console.log('m.permission_group_id', m.permission_group_id)
-        if (parentBoolean) {
+      for (const item of this.allPermissionGroup) {
+        console.log('item', item)
+        if (item.id === m.permission_group_id) {
           item.checked = true;
-
           let permissionIndex = 0;
           item['permission_group_items'].map((elm) => {
 
             let childCheckd = res['data'].some(e => {
               return e?.permission === elm?.itemData?.permission
             })
-            console.log('childCheckd', childCheckd)
-
-            console.log('elm', elm?.itemData?.permission);
-            console.log('m', res['data'][permissionIndex]?.permission)
+            console.log('childCheckd', childCheckd);
+            
 
             if (childCheckd) {
-              console.log("res['data'][permissionIndex]?.permission", res['data'][permissionIndex]?.permission)
-
               elm.isChecked = true;
               elm['itemData'] = res['data'][permissionIndex];
               permissionIndex++;
 
-            } else if (!childCheckd){
+            } else if (!childCheckd) {
               elm.isChecked = false;
             }
-
-
-
           });
-          console.log('item.permission_group_items', item?.permission_group_items);
-        } else if (!parentBoolean) {
-          item.checked = false
         }
+      }
 
-      });
-    });
-
-
+    }
     this.getCheckedData = this.allPermissionGroup;
+    console.log('this.form.value', this.form.value)
   }
+  // staticDataFunc(res) {
+  //   console.log('this.allPermissionGroup', this.allPermissionGroup)
+  //   for (const item1 of res['data']) {
+  //     for (const item2 of this.allPermissionGroup) {
+  //       console.log('item1', item1)
+  //       console.log('item2', item2)
+
+  //       if (item1.permission_group_id === item2.id) {
+  //         item2['permission_group_items'] = {
+  //           isChecked: true,
+  //           itemData: item1
+  //         }
+  //       }
+  //       console.log('item2', item2)
+        
+  //     }
+  //   }
+  // }
 
 
 }
