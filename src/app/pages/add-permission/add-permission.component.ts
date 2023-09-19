@@ -257,10 +257,13 @@ export class AddPermissionComponent implements OnInit {
       item.permission_group_items.forEach(val => {
         val.isChecked = event.checked;
         if (val.isChecked) {
+          console.log('val checked');
+          
           this.form.get('permission').setValue(val?.itemData?.permission);
         }
 
         else if (!val.isChecked) {
+          console.log('val unchecked');
           console.log('value unchecked', val.isChecked)
           // this.authService.deleteRolePermission(val?.itemData.id).subscribe({
           //   next: (res) => {
@@ -273,7 +276,7 @@ export class AddPermissionComponent implements OnInit {
           //   }
           // })
         }
-        // this.getCheckedData({ checked: event.checked }, val);
+        // this.checkChieldData({ checked: event.checked }, val);
       });
     }
     else {
@@ -294,20 +297,36 @@ export class AddPermissionComponent implements OnInit {
   }
 
 
-  // getCheckedData(e: any, name: string) {
-  //   console.log('eeeeee', e)
-  //   console.log(e)
-  //   const checkArray: FormArray = this.form.get('checkArray') as FormArray;
-  //   if (e.isChecked) {
-  //     console.log(name, 'checkedhhhhhhhhhh')
-  //     checkArray.push(new FormControl(e.source.value));
-  //   }
-  //   else {
-  //     let index = checkArray.controls.findIndex(x => x.value == name)
-  //     checkArray.removeAt(index);
+  checkChieldData(e: any, name: string) {
+    console.log('eeeeee', e)
+    console.log(e)
+    const checkArray1: FormArray = this.form.get('checkArray1') as FormArray;
+    console.log('checkedData', this.getCheckedData)
+    this.getCheckedData.forEach((item)=> {
+      // this.form.get('permission_group_id').setValue(item.id);
+    
+    item.permission_group_items.map((child)=> {
+      console.log('child', child?.itemData?.permission);
+      if(child?.itemData?.permission === e.source.value.itemData.permission){
+        checkArray1.push(new FormControl(item));
+        console.log('checkArray1', checkArray1);
+        
+      }
+      // let allChieldCheckFalse = e.source
 
-  //   }
-  // }
+    })
+      
+    })
+    // if (e.isChecked) {
+    //   console.log(name, 'checkedhhhhhhhhhh')
+    //   checkArray.push(new FormControl(e.source.value));
+    // }
+    // else {
+    //   let index = checkArray.controls.findIndex(x => x.value == name)
+    //   checkArray.removeAt(index);
+
+    // }
+  }
 
 
 

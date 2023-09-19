@@ -18,9 +18,9 @@
       <h1>{{ item?.name }}</h1>
     </mat-checkbox>
     <div>
-      <!-- (change)="getCheckedData($event, val)" -->
+      <!-- (change)="checkChieldData($event, val)" -->
       <mat-checkbox *ngFor="let val of item.permission_group_items" [value]="val" [(ngModel)]="val.isChecked"
-        [ngModelOptions]="{standalone: true}" [checked]="val.isChecked">
+        [ngModelOptions]="{standalone: true}" [checked]="val.isChecked"  (change)="checkChieldData($event, val)">
         <p>{{ val?.itemData?.permission }}</p>
         <p>{{val?.itemData?.id}}</p>
       </mat-checkbox>
