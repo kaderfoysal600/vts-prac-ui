@@ -90,8 +90,6 @@ export class AddPermissionComponent implements OnInit {
       next: (res) => {
         if (res) {
           this.allRoles = res
-
-
         } else {
           console.log('Error! Please try again.')
         }
@@ -145,13 +143,14 @@ export class AddPermissionComponent implements OnInit {
     });
   }
   private newfunc() {
-    console.log('allPermissionGroup', this.allPermissionGroup);
+
 
     this.allPermissionGroup?.forEach(item => {
       item.permission_group_items = item.permission_group_items?.map(val =>
         ({ itemData: val, isChecked: false })
       );
     });
+    console.log('allPermissionGroup', this.allPermissionGroup);
   }
 
 
@@ -194,15 +193,15 @@ export class AddPermissionComponent implements OnInit {
           })
         } else {
 
-          deleteId = m?.itemData?.id;
-          console.log('m?.itemData.id', m?.itemData?.id)
-          itemAdd = false;
+          // deleteId = m?.itemData?.id;
+          // console.log('m?.itemData.id', m?.itemData?.id)
+          // itemAdd = false;
         }
 
 
 
       })
-      if (itemAdd) {
+      // if (itemAdd) {
 
         this.authService.addRolePermission(this.checkedData).subscribe({
           next: (res) => {
@@ -220,7 +219,7 @@ export class AddPermissionComponent implements OnInit {
         })
 
 
-      }
+      // }
 
 
       if (!itemAdd) {
@@ -263,24 +262,28 @@ export class AddPermissionComponent implements OnInit {
 
         else if (!val.isChecked) {
           console.log('value unchecked', val.isChecked)
-          this.authService.deleteRolePermission(val?.itemData.id).subscribe({
-            next: (res) => {
-              if (res) {
-                console.log("deleted Successfully")
-              }
-            },
-            error: (err) => {
+          // this.authService.deleteRolePermission(val?.itemData.id).subscribe({
+          //   next: (res) => {
+          //     if (res) {
+          //       console.log("deleted Successfully")
+          //     }
+          //   },
+          //   error: (err) => {
 
-            }
-          })
+          //   }
+          // })
         }
         // this.getCheckedData({ checked: event.checked }, val);
       });
     }
     else {
+      this.form.get('permission_group_id').setValue(item.id);
+      checkArray.push(new FormControl(item));
       let index = checkArray.controls.findIndex(x => x.value == name)
-      checkArray.removeAt(index);
+      console.log('index', index)
+      // checkArray.removeAt(index);
       item.permission_group_items.forEach(val => {
+        
         val.isChecked = event.checked;
         console.log('val?.itemData.id', val?.itemData.id)
       });
@@ -350,51 +353,6 @@ export class AddPermissionComponent implements OnInit {
     });
   }
 
-  // anotherFunc(res) {
-  //   res['data'].map((m) => {
-  //     this.allPermissionGroup?.forEach((item: any) => {
-  //       console.log('item', item)
-  //       if(item.id === m.permission_group_id){
-  //         item.checked = true;
-  //         let permissionIndex = 0;
-  //         item['permission_group_items'].map((elm) => {
-
-  //           let childCheckd = res['data'].some(e => {
-  //             return e?.permission === elm?.itemData?.permission
-  //           })
-
-  //           if (childCheckd) {
-  //             elm.isChecked = true;
-  //             elm['itemData'] = res['data'][permissionIndex];
-  //             permissionIndex++;
-
-  //           } else if (!childCheckd) {
-  //             elm.isChecked = false;
-  //           }
-  //         });
-  //       }
-
-  //       // if (parentBoolean) {
-
-
-
-  //       // } else if (!parentBoolean) {
-  //       //   item.checked = false
-  //       // }
-  //     });
-  //   });
-  //   this.getCheckedData = this.allPermissionGroup;
-
-  //   this.form.value.checkArray1= this.getCheckedData
-  //   console.log('this.form.value', this.form.value)
-  // }
-
-
-
-
-
-
-
   anotherFunc(res) {
     for (const m of res['data']) {
 
@@ -402,23 +360,23 @@ export class AddPermissionComponent implements OnInit {
         console.log('item', item)
         if (item.id === m.permission_group_id) {
           item.checked = true;
-          let permissionIndex = 0;
-          item['permission_group_items'].map((elm) => {
+       
+          item['permission_group_items'].forEach((elm) => {
 
-            let childCheckd = res['data'].some(e => {
-              return e?.permission === elm?.itemData?.permission
+            res['data'].forEach(e => {
+              // let permissionIndex = 0;
+              if (e?.permission === elm?.itemData?.permission) {
+                elm.isChecked = true;
+
+                // elm['itemData'] = res['data'][permissionIndex];
+                // permissionIndex++;
+              }
+
             })
-            console.log('childCheckd', childCheckd);
-            
 
-            if (childCheckd) {
-              elm.isChecked = true;
-              elm['itemData'] = res['data'][permissionIndex];
-              permissionIndex++;
 
-            } else if (!childCheckd) {
-              elm.isChecked = false;
-            }
+
+
           });
         }
       }
@@ -440,8 +398,6 @@ export class AddPermissionComponent implements OnInit {
   //           itemData: item1
   //         }
   //       }
-  //       console.log('item2', item2)
-        
   //     }
   //   }
   // }
