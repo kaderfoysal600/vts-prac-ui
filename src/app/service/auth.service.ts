@@ -106,8 +106,8 @@ export class AuthService {
     return this.http.post('http://localhost:3000/api/addRolePermission', data)
   }
 
-  getAllRolePermission() {
-    return this.http.get('http://localhost:3000/api/getRolePermissions');
+  getAllRolePermission(id) {
+    return this.http.get(`http://localhost:3000/api/getRolePermissions/${id}`);
   }
   deleteRolePermission(id: string) {
     return this.http.delete('http://localhost:3000/api/deleteRolePermission/' + id);

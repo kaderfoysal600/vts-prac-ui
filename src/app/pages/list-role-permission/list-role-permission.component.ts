@@ -29,27 +29,27 @@ export class ListRolePermissionComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
-    this.getAllRolePermission()
+    // this.getAllRolePermission()
 
   }
 
 
-  getAllRolePermission() {
-   this.subDataOne = this.authService.getAllRolePermission().subscribe({
-      next: (res) => {
-        if (res) {
-          this.allRolePermissions = res
-          console.log(res)
+  // getAllRolePermission() {
+  //  this.subDataOne = this.authService.getAllRolePermission().subscribe({
+  //     next: (res) => {
+  //       if (res) {
+  //         this.allRolePermissions = res
+  //         console.log(res)
 
-        } else {
-          console.log('Error! Please try again.')
-        }
-      },
-      error: (err) => {
-        console.log(err)
-      }
-    })
-  }
+  //       } else {
+  //         console.log('Error! Please try again.')
+  //       }
+  //     },
+  //     error: (err) => {
+  //       console.log(err)
+  //     }
+  //   })
+  // }
 
   public openEditControllerDialog(data?: any) {
     const dialogRef = this.dialog.open(RolePermissionDialogComponent, {
@@ -77,7 +77,7 @@ export class ListRolePermissionComponent implements OnInit {
           if (res) {
             console.log('Role Permission added successfully')
             this.uiService.success('Role Permission added successfully');
-            this.getAllRolePermission()
+            // this.getAllRolePermission()
           } else {
             console.log('Error! Please try again.')
           }
@@ -96,7 +96,7 @@ export class ListRolePermissionComponent implements OnInit {
         console.log(res);
         this.uiService.success('Role Permission updated successfully');
         if (res) {
-          this.getAllRolePermission()
+          // this.getAllRolePermission()
         }
       },
       error: (err) => {
@@ -112,7 +112,7 @@ export class ListRolePermissionComponent implements OnInit {
         console.log(res);
         this.uiService.success('Role Permission deleted successfully');
         if (res) {
-          this.getAllRolePermission()
+          // this.getAllRolePermission()
         }
       },
       error: (err) => {

@@ -65,7 +65,7 @@ export class EditPermissionComponent implements OnInit {
     })
     this.getRoleData()
     this.getRoleById()
-    this.getAllPermission()
+    this.getAllPermission(this.Id)
   }
 
 
@@ -329,8 +329,8 @@ export class EditPermissionComponent implements OnInit {
 
 
 
-  getAllPermission() {
-    this.subDataOne = this.authService.getAllRolePermission().subscribe({
+  getAllPermission(id) {
+    this.subDataOne = this.authService.getAllRolePermission(id).subscribe({
       next: (res) => {
         if (res) {
           console.log('role permission', res);

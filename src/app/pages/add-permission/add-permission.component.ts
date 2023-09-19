@@ -20,6 +20,7 @@ export class AddPermissionComponent implements OnInit {
   allPermissionGroupItem: any;
   form: FormGroup;
   Id: any;
+  itemChecked = false;
   checked = false;
   private subDataOne: Subscription;
   private subDataTwo: Subscription;
@@ -64,7 +65,7 @@ export class AddPermissionComponent implements OnInit {
     })
     this.getRoleData()
     this.getRoleById()
-    this.getAllPermission()
+    this.getAllPermission(this.Id)
   }
 
 
@@ -246,12 +247,12 @@ export class AddPermissionComponent implements OnInit {
   checkAllPermissions(event: any, item: any) {
     console.log('item', item);
     console.log('event', event);
-    item.checked = event.checked;
+   this.itemChecked =  event.checked;
     this.form.patchValue({
       role_id: this.Id
     })
     const checkArray: FormArray = this.form.get('checkArray1') as FormArray;
-    if (event.checked) {
+    if (this.itemChecked) {
       this.form.get('permission_group_id').setValue(item.id);
       checkArray.push(new FormControl(item));
       item.permission_group_items.forEach(val => {
@@ -263,6 +264,7 @@ export class AddPermissionComponent implements OnInit {
         }
 
         else if (!val.isChecked) {
+         
           console.log('val unchecked');
           console.log('value unchecked', val.isChecked)
           // this.authService.deleteRolePermission(val?.itemData.id).subscribe({
@@ -310,6 +312,7 @@ export class AddPermissionComponent implements OnInit {
       if(child?.itemData?.permission === e.source.value.itemData.permission){
         checkArray1.push(new FormControl(item));
         console.log('checkArray1', checkArray1);
+
         
       }
       // let allChieldCheckFalse = e.source
@@ -353,9 +356,9 @@ export class AddPermissionComponent implements OnInit {
   }
 
 
-  getAllPermission() {
+  getAllPermission(id) {
 
-    this.subDataOne = this.authService.getAllRolePermission().subscribe({
+    this.subDataOne = this.authService.getAllRolePermission(id).subscribe({
       next: (res) => {
         if (res) {
           console.log('role permission', res);
@@ -374,6 +377,8 @@ export class AddPermissionComponent implements OnInit {
 
   anotherFunc(res) {
     for (const m of res['data']) {
+      console.log('m.role_id', m.role_id);
+      
 
       for (const item of this.allPermissionGroup) {
         console.log('item', item)
@@ -404,23 +409,6 @@ export class AddPermissionComponent implements OnInit {
     this.getCheckedData = this.allPermissionGroup;
     console.log('this.form.value', this.form.value)
   }
-  // staticDataFunc(res) {
-  //   console.log('this.allPermissionGroup', this.allPermissionGroup)
-  //   for (const item1 of res['data']) {
-  //     for (const item2 of this.allPermissionGroup) {
-  //       console.log('item1', item1)
-  //       console.log('item2', item2)
-
-  //       if (item1.permission_group_id === item2.id) {
-  //         item2['permission_group_items'] = {
-  //           isChecked: true,
-  //           itemData: item1
-  //         }
-  //       }
-  //     }
-  //   }
-  // }
-
 
 }
 
