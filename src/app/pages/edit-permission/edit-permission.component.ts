@@ -286,6 +286,9 @@ export class EditPermissionComponent implements OnInit {
       console.log('m.role_id', m.role_id);
 
       console.log('allPermissionGroupaaa', this.allPermissionGroup)
+      // if(this.allPermissionGroup?.length > 0 || undefined || null || false){
+      //   console.log('data loading')
+      // }
 
       if (this.allPermissionGroup?.length > 0) {
         for (const item of this.allPermissionGroup) {
@@ -411,7 +414,7 @@ export class EditPermissionComponent implements OnInit {
             duration: 2000,
             panelClass: ['green-snackbar']
           })
-          this.getAllPermission(this.Id)
+          // this.getAllPermission(this.Id)
 
 
         } else {
