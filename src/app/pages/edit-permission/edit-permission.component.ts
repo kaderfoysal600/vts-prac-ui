@@ -12,8 +12,9 @@ import { AuthService } from 'src/app/service/auth.service';
   styleUrls: ['./edit-permission.component.scss']
 })
 export class EditPermissionComponent implements OnInit {
-  selectedValue: string;
-  allRoles: any;
+
+
+  //store data
   checkAll: false;
   checkedData: any;
   allRole: any;
@@ -27,22 +28,19 @@ export class EditPermissionComponent implements OnInit {
   isButtonDisabled = true;
   allRolePermisson: any = [];
   isLoadingFeaturedProducts: boolean = false;
-  color = 'red'
-  private subDataOne: Subscription;
-  private subDataTwo: Subscription;
-  private subDataThree: Subscription;
-
-  itemToUpdate: any = [];
-  itemToDelete: any = [];
-
   itemToSubmit: any = [
     { itemToUpdate: [], itemToDelete: [] },
     { role_id: Number }
-
   ]
-
   getCheckedData: any
 
+  //subscription
+  private subDataOne: Subscription;
+  private subDataTwo: Subscription;
+  private subDataThree: Subscription
+  private subDataFour: Subscription;
+
+  
   constructor(
     public authService: AuthService,
     private fb: FormBuilder,
@@ -67,27 +65,6 @@ export class EditPermissionComponent implements OnInit {
       permission_group_id: ['', {}],
       permission: ['', {}],
     })
-    this.getRoleById()
-   
-  }
-
-
-  getRoleById() {
-    this.spinner.show();
-    this.subDataTwo = this.authService.getAllrole().subscribe({
-      next: (res) => {
-        this.spinner.hide();
-        if (res) {
-          this.allRole = res;
-          this.singleRole = this.allRole.find(role => role.id == this.Id)
-        } else {
-          console.log('Error! Please try again.')
-        }
-      },
-      error: (err) => {
-        console.log(err)
-      }
-    })
   }
 
 
@@ -95,7 +72,6 @@ export class EditPermissionComponent implements OnInit {
     this.spinner.show();
     this.subDataOne = this.authService.getAllPermissionGroupItem().subscribe({
       next: (res) => {
-
         if (res) {
           this.spinner.hide();
           this.allPermissionGroupItem = res
@@ -114,12 +90,11 @@ export class EditPermissionComponent implements OnInit {
 
   private getAllPermissionGroup() {
     this.spinner.show();
-    this.authService.getAllPermissionGroup().subscribe({
+    this.subDataTwo = this.authService.getAllPermissionGroup().subscribe({
       next: (res: any) => {
         console.log('res', res)
         this.spinner.hide();
         this.allp(res)
-     
       },
       error: (error: any) => {
         console.log(error);
@@ -140,22 +115,15 @@ export class EditPermissionComponent implements OnInit {
     console.log('data', data)
     this.newfunc(data)
   }
-
-  private newfunc(d) {
+  newfunc(d:any) {
     d?.forEach(item => {
       item.permission_group_items = item.permission_group_items?.map(val =>
         ({ itemData: val, isChecked: false })
       );
     });
-    console.log('d', d)
     this.allPermissionGroup = d;
     this.getAllPermission(this.Id)
-
-    
   }
-
-
-
 
   submitForm() {
     this.form.get('role_id').setValue(this.Id);
@@ -168,7 +136,6 @@ export class EditPermissionComponent implements OnInit {
     }
 
   }
-
 
 
   checkAllPermissions(event: any, item: any) {
@@ -184,15 +151,9 @@ export class EditPermissionComponent implements OnInit {
       item.permission_group_items.forEach(val => {
         val.isChecked = event.checked;
         if (val.isChecked) {
-          console.log('val checked');
-
-
-          this.form.get('permission').setValue(val?.itemData?.permission);
+           this.form.get('permission').setValue(val?.itemData?.permission);
         }
-
         else if (!val.isChecked) {
-
-          console.log('val unchecked');
           console.log('value unchecked', val.isChecked)
         }
       });
@@ -202,11 +163,8 @@ export class EditPermissionComponent implements OnInit {
       checkArray.push(new FormControl(item));
       let index = checkArray.controls.findIndex(x => x.value == name)
       console.log('index', index)
-      // checkArray.removeAt(index);
       item.permission_group_items.forEach(val => {
-
         val.isChecked = event.checked;
-        console.log('val?.itemData.id', val?.itemData.id)
       });
 
     }
@@ -217,28 +175,16 @@ export class EditPermissionComponent implements OnInit {
 
   checkChieldData(e: any, name: string) {
     this.isButtonDisabled = false;
-    console.log(' this.allRolePermisson', this.allRolePermisson)
     const checkArray1: FormArray = this.form.get('checkArray1') as FormArray;
-    console.log('checkArray1-1', checkArray1);
-    console.log('checkedData', this.getCheckedData)
     this.getCheckedData.forEach((item) => {
-
       item.permission_group_items.map((child) => {
-        console.log('child', child?.itemData?.permission);
         if (child?.itemData?.permission === e.source.value.itemData.permission) {
           if (checkArray1.value.length <= 0) {
             checkArray1.push(new FormControl(item));
-            console.log('checkArray1', checkArray1);
-            console.log('item', item?.permission_group_items);
           }
-
         }
-
       })
-
     })
-
-    console.log('checkedData', this.getCheckedData)
   }
 
 
@@ -269,10 +215,6 @@ export class EditPermissionComponent implements OnInit {
     }
 
   }
-
-
-
-
 
 
   itemTobeSubmit() {
@@ -316,12 +258,11 @@ export class EditPermissionComponent implements OnInit {
     this.addRolePermission(this.itemToSubmit)
   }
 
-
   addRolePermission(data) {
     console.log('data', data);
     
     this.spinner.show();
-    this.authService.addRolePermission(data).subscribe({
+    this.subDataThree =  this.authService.addRolePermission(data).subscribe({
       next: (res) => {
         this.spinner.hide();
         if (res) {
@@ -349,11 +290,9 @@ export class EditPermissionComponent implements OnInit {
     })
   }
 
-
-
   getAllPermission(id) {
     this.spinner.show();
-    this.subDataThree = this.authService.getAllRolePermission(id).subscribe({
+    this.subDataFour =  this.authService.getAllRolePermission(id).subscribe({
       next: (res) => {
         this.spinner.hide();
         if (res) {
@@ -370,8 +309,6 @@ export class EditPermissionComponent implements OnInit {
     });
   }
 
-
-
   anotherFunc(res) {
     res['data'].map((m:any)=> {
       if (this.allPermissionGroup?.length > 0) {
@@ -382,19 +319,32 @@ export class EditPermissionComponent implements OnInit {
                 if (m?.permission === elm?.itemData?.permission) {
                   elm.isChecked = true;
                 }
-      
             });
           }
         })
       }
     })
     this.allRolePermisson = res['data'];
-    this.getCheckedData = res['data']   
+    this.getCheckedData = res['data']; 
     this.getCheckedData = this.allPermissionGroup;
-    
-
   }
 
-
+  /**
+    * ON DESTROY
+    */
+  ngOnDestroy() {
+    if (this.subDataOne) {
+      this.subDataOne.unsubscribe();
+    }
+    if (this.subDataTwo) {
+      this.subDataTwo.unsubscribe();
+    }
+    if (this.subDataThree) {
+      this.subDataThree.unsubscribe();
+    }
+    if (this.subDataFour) {
+      this.subDataFour.unsubscribe();
+    }
+  }
 }
 
