@@ -11,7 +11,7 @@
         <h3>Item not found</h3>
       </div>
       <mat-checkbox class="parent" *ngIf="item" [(ngModel)]="item.checked" color="warn"
-        [ngModelOptions]="{standalone: true}" [value]="item.name" (change)="checkAllPermissions($event, item)">
+        [ngModelOptions]="{standalone: true}" [value]="item.name" (change)="checkParentData($event, item)">
         <h2>{{ item?.name }}</h2>
       </mat-checkbox>
       <div class="chield">

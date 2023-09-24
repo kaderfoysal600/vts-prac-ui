@@ -67,6 +67,7 @@ export class EditPermissionComponent implements OnInit {
     })
   }
 
+//initial data
 
   getAllPermissionGroupItem() {
     this.spinner.show();
@@ -101,8 +102,6 @@ export class EditPermissionComponent implements OnInit {
       },
     });
   }
-
-
   allp(data: any) {
    data?.map((item: any) => {
       item['permission_group_items'] = []
@@ -125,20 +124,11 @@ export class EditPermissionComponent implements OnInit {
     this.getAllPermission(this.Id)
   }
 
-  submitForm() {
-    this.form.get('role_id').setValue(this.Id);
-    this.checkedData = this.form.value;
-    if (this.form.invalid) {
-      console.log('Invalid Input field!');
-      return;
-    } else {
-      this.itemTobeSubmit()
-    }
+ 
 
-  }
+//checked data 
 
-
-  checkAllPermissions(event: any, item: any) {
+  checkParentData(event: any, item: any) {
     this.isButtonDisabled = false;
     this.itemChecked = event.checked;
     this.form.patchValue({
@@ -172,7 +162,6 @@ export class EditPermissionComponent implements OnInit {
 
   }
 
-
   checkChieldData(e: any, name: string) {
     this.isButtonDisabled = false;
     const checkArray1: FormArray = this.form.get('checkArray1') as FormArray;
@@ -187,35 +176,19 @@ export class EditPermissionComponent implements OnInit {
     })
   }
 
+  //submit data
 
-
-
-  checkAllP(event) {
-    console.log(event.checked)
-    if (event.checked === true && this.getCheckedData?.length > 0) {
-      this.isButtonDisabled = false;
-      console.log('this.isButtonDisabled', this.isButtonDisabled)
-
-      this.getCheckedData.map((item) => {
-        item.checked = true;
-        item.permission_group_items.map((child) => {
-          child.isChecked = true;
-        })
-
-      })
-    }
-    else if (event.checked === false) {
-      this.getCheckedData.map((item) => {
-        item.checked = false;
-        item.permission_group_items.map((child) => {
-          child.isChecked = false;
-        })
-
-      })
+  submitForm() {
+    this.form.get('role_id').setValue(this.Id);
+    this.checkedData = this.form.value;
+    if (this.form.invalid) {
+      console.log('Invalid Input field!');
+      return;
+    } else {
+      this.itemTobeSubmit()
     }
 
   }
-
 
   itemTobeSubmit() {
     this.getCheckedData.forEach((item) => {
@@ -257,7 +230,7 @@ export class EditPermissionComponent implements OnInit {
     this.itemToSubmit[1]['role_id'] = this.Id;
     this.addRolePermission(this.itemToSubmit)
   }
-
+//add data to api 
   addRolePermission(data) {
     console.log('data', data);
     
@@ -290,6 +263,7 @@ export class EditPermissionComponent implements OnInit {
     })
   }
 
+  //get data form api 
   getAllPermission(id) {
     this.spinner.show();
     this.subDataFour =  this.authService.getAllRolePermission(id).subscribe({
@@ -328,6 +302,34 @@ export class EditPermissionComponent implements OnInit {
     this.getCheckedData = res['data']; 
     this.getCheckedData = this.allPermissionGroup;
   }
+
+
+  checkAllP(event) {
+    console.log(event.checked)
+    if (event.checked === true && this.getCheckedData?.length > 0) {
+      this.isButtonDisabled = false;
+      console.log('this.isButtonDisabled', this.isButtonDisabled)
+
+      this.getCheckedData.map((item) => {
+        item.checked = true;
+        item.permission_group_items.map((child) => {
+          child.isChecked = true;
+        })
+
+      })
+    }
+    else if (event.checked === false) {
+      this.getCheckedData.map((item) => {
+        item.checked = false;
+        item.permission_group_items.map((child) => {
+          child.isChecked = false;
+        })
+
+      })
+    }
+
+  }
+
 
   /**
     * ON DESTROY
