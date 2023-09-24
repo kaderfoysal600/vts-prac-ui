@@ -71,7 +71,7 @@ const routes: Routes = [{
       loadChildren: () => import('./add-permission/add-permission.module').then(m => m.AddPermissionModule)
     },
     {
-      path: 'edit-permission/:id',
+      path: 'role/permission/:id',
       loadChildren: () => import('./edit-permission/edit-permission.module').then(m => m.EditPermissionModule)
     },
   ]

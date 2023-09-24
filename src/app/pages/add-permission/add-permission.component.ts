@@ -318,3 +318,16 @@ export class AddPermissionComponent implements OnInit {
 
 
 
+  /////
+
+  // this.dataForm.patchValue({
+  //   areWhereYouLiveIn: this.selectedDatas1
+  // })
+  // const mData = {
+  //   ...this.dataForm.value,
+  //   ...{
+  //     checkBoxData: this.selectedDatas,
+  //     checkBoxData2: this.selectedDatas1
+  //   }
+
+  // }

@@ -123,7 +123,7 @@ export class ListRoleComponent implements OnInit {
   }
 
   addPermission(data) {
-    this.router.navigate(["/edit-permission", data.id]);
+    this.router.navigate(["/role/permission", data.id]);
   }
 
   /**

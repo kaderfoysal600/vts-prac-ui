@@ -5,7 +5,7 @@ import { EditPermissionRoutingModule } from './edit-permission-routing.module';
 import { EditPermissionComponent } from './edit-permission.component';
 import { MaterialModule } from 'src/app/material/material.module';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-
+import {NgxSpinnerModule} from 'ngx-spinner';
 
 @NgModule({
   declarations: [
@@ -16,7 +16,8 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
     EditPermissionRoutingModule,
     MaterialModule,
     ReactiveFormsModule,
-    FormsModule
+    FormsModule,
+    NgxSpinnerModule
   ]
 })
 export class EditPermissionModule { }
