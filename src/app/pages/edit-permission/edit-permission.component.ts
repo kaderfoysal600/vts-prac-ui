@@ -65,6 +65,26 @@ export class EditPermissionComponent implements OnInit {
       permission_group_id: ['', {}],
       permission: ['', {}],
     })
+    this.getRoleById() 
+  }
+
+
+  getRoleById() {
+    this.spinner.show();
+    this.subDataTwo = this.authService.getAllrole().subscribe({
+      next: (res) => {
+        this.spinner.hide();
+        if (res) {
+          this.allRole = res;
+          this.singleRole = this.allRole.find(role => role.id == this.Id)
+        } else {
+          console.log('Error! Please try again.')
+        }
+      },
+      error: (err) => {
+        console.log(err)
+      }
+    })
   }
 
 //initial data
