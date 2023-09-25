@@ -12,7 +12,8 @@ import { AuthService } from 'src/app/service/auth.service';
   styleUrls: ['./list-user.component.scss']
 })
 export class ListUserComponent implements OnInit {
-  allUser
+  allUser:any;
+  allRole:any;
   // Subscriptions
   private subDataOne: Subscription;
   private subDataTwo: Subscription;
@@ -27,7 +28,8 @@ export class ListUserComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
-    this.getAllUser()
+    this.getAllRole();
+    this.getAllUser();
   }
 
 
@@ -36,6 +38,24 @@ export class ListUserComponent implements OnInit {
       next: (res) => {
         if (res) {
           this.allUser = res
+          console.log('res', res)
+          this.getAllUserWithRoleName()
+
+        } else {
+          console.log('Error! Please try again.')
+        }
+      },
+      error: (err) => {
+        console.log(err)
+      }
+    })
+  }
+
+  getAllRole() {
+    this.subDataFour = this.authService.getAllrole().subscribe({
+      next: (res) => {
+        if (res) {
+          this.allRole = res
           console.log(res)
 
         } else {
@@ -45,6 +65,16 @@ export class ListUserComponent implements OnInit {
       error: (err) => {
         console.log(err)
       }
+    })
+  }
+
+  getAllUserWithRoleName(){
+    this.allUser.map((user) => {
+      this.allRole.map(role => {
+        if(user.role_id === role.id){
+          user["role_name"] = role.name;
+        }
+      });
     })
   }
 

@@ -2,6 +2,7 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { PermissionGroupItemDialogComponent } from './permission-group-item-dialog.component';
 import { MaterialModule } from 'src/app/material/material.module';
+import { MatIconModule } from '@angular/material/icon';
 
 
 
@@ -11,7 +12,8 @@ import { MaterialModule } from 'src/app/material/material.module';
   ],
   imports: [
     CommonModule,
-    MaterialModule
+    MaterialModule,
+    MatIconModule
   ],
   exports: [
     PermissionGroupItemDialogComponent

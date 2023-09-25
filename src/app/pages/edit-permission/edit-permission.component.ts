@@ -203,18 +203,15 @@ export class EditPermissionComponent implements OnInit {
     this.getCheckedData.forEach((item) => {
       if (item.checked) {
         item.permission_group_items.forEach((elm) => {
+          let capableUpdate = this.allRolePermisson.filter((elmPermission) => {
+            return elmPermission?.permission === elm.itemData?.permission;
+          });
           if (elm.isChecked) {
-            let capableUpdate = this.allRolePermisson.filter((elmPermission) => {
-              return elmPermission?.permission === elm.itemData?.permission;
-            });
             if (capableUpdate.length === 0) {
               this.itemToSubmit[0].itemToUpdate.push(elm.itemData);
             }
           }
           else if (!elm.isChecked) {
-            let capableUpdate = this.allRolePermisson.filter((elmPermission) => {
-              return elmPermission?.permission === elm.itemData?.permission;
-            });
             if (capableUpdate.length > 0) {
               this.itemToSubmit[0].itemToDelete.push(elm.itemData);
             }
@@ -252,7 +249,6 @@ export class EditPermissionComponent implements OnInit {
           this.itemToSubmit = [
             { itemToUpdate: [], itemToDelete: [] },
             { role_id: Number }
-
           ]
           console.log('role permission added successfully')
 
@@ -340,7 +336,6 @@ export class EditPermissionComponent implements OnInit {
     }
 
   }
-
 
   /**
     * ON DESTROY
