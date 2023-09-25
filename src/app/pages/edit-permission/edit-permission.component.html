@@ -2,7 +2,7 @@
   <form action="" [formGroup]="form" (ngSubmit)="submitForm()">
     <h2 class="top-title">Add Role Permission to - ( {{singleRole?.name}} )
       <mat-checkbox [(ngModel)]="checkAll" [ngModelOptions]="{standalone: true}" color="warn"
-        (change)="checkAllP($event)">
+        (change)="checkAllPermission($event)">
         <h1>Check All</h1>
       </mat-checkbox>
     </h2>

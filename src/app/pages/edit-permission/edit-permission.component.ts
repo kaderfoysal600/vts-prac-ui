@@ -40,7 +40,7 @@ export class EditPermissionComponent implements OnInit {
   private subDataThree: Subscription
   private subDataFour: Subscription;
 
-  
+
   constructor(
     public authService: AuthService,
     private fb: FormBuilder,
@@ -65,7 +65,7 @@ export class EditPermissionComponent implements OnInit {
       permission_group_id: ['', {}],
       permission: ['', {}],
     })
-    this.getRoleById() 
+    this.getRoleById()
   }
 
 
@@ -87,7 +87,7 @@ export class EditPermissionComponent implements OnInit {
     })
   }
 
-//initial data
+  //initial data
 
   getAllPermissionGroupItem() {
     this.spinner.show();
@@ -95,6 +95,7 @@ export class EditPermissionComponent implements OnInit {
       next: (res) => {
         if (res) {
           this.spinner.hide();
+          console.log('res for all permission grop item', res)
           this.allPermissionGroupItem = res
           this.getAllPermissionGroup()
 
@@ -113,47 +114,39 @@ export class EditPermissionComponent implements OnInit {
     this.spinner.show();
     this.subDataTwo = this.authService.getAllPermissionGroup().subscribe({
       next: (res: any) => {
-        console.log('res', res)
+        console.log('res of permission group', res)
         this.spinner.hide();
-        this.allp(res)
+        this.insertItemToPermissionGroup(res)
       },
       error: (error: any) => {
         console.log(error);
       },
     });
   }
-  allp(data: any) {
-   data?.map((item: any) => {
+  insertItemToPermissionGroup(data: any) {
+    data?.map((item: any) => {
       item['permission_group_items'] = []
       this.allPermissionGroupItem?.map(item2 => {
         if (item.id == item2.permission_group_id) {
           item['permission_group_items'].push(item2)
         }
       })
-    })
-    console.log('data', data)
-    this.newfunc(data)
-  }
-  newfunc(d:any) {
-    d?.forEach(item => {
+
       item.permission_group_items = item.permission_group_items?.map(val =>
         ({ itemData: val, isChecked: false })
       );
-    });
-    this.allPermissionGroup = d;
+    })
+    console.log('data', data)
+    this.allPermissionGroup = data;
     this.getAllPermission(this.Id)
   }
 
- 
 
-//checked data 
+  //checked data 
 
   checkParentData(event: any, item: any) {
     this.isButtonDisabled = false;
     this.itemChecked = event.checked;
-    this.form.patchValue({
-      role_id: this.Id
-    })
     const checkArray: FormArray = this.form.get('checkArray1') as FormArray;
     if (this.itemChecked) {
       this.form.get('permission_group_id').setValue(item.id);
@@ -161,7 +154,7 @@ export class EditPermissionComponent implements OnInit {
       item.permission_group_items.forEach(val => {
         val.isChecked = event.checked;
         if (val.isChecked) {
-           this.form.get('permission').setValue(val?.itemData?.permission);
+          this.form.get('permission').setValue(val?.itemData?.permission);
         }
         else if (!val.isChecked) {
           console.log('value unchecked', val.isChecked)
@@ -170,9 +163,6 @@ export class EditPermissionComponent implements OnInit {
     }
     else {
       this.form.get('permission_group_id').setValue(item.id);
-      checkArray.push(new FormControl(item));
-      let index = checkArray.controls.findIndex(x => x.value == name)
-      console.log('index', index)
       item.permission_group_items.forEach(val => {
         val.isChecked = event.checked;
       });
@@ -188,12 +178,11 @@ export class EditPermissionComponent implements OnInit {
     this.getCheckedData.forEach((item) => {
       item.permission_group_items.map((child) => {
         if (child?.itemData?.permission === e.source.value.itemData.permission) {
-          if (checkArray1.value.length <= 0) {
             checkArray1.push(new FormControl(item));
-          }
         }
       })
     })
+
   }
 
   //submit data
@@ -241,7 +230,7 @@ export class EditPermissionComponent implements OnInit {
           });
           if (capableUpdate.length > 0) {
             this.itemToSubmit[0].itemToDelete.push(elm.itemData);
-          } 
+          }
 
         });
       }
@@ -250,19 +239,20 @@ export class EditPermissionComponent implements OnInit {
     this.itemToSubmit[1]['role_id'] = this.Id;
     this.addRolePermission(this.itemToSubmit)
   }
-//add data to api 
+
+  //add data to api 
   addRolePermission(data) {
     console.log('data', data);
-    
+
     this.spinner.show();
-    this.subDataThree =  this.authService.addRolePermission(data).subscribe({
+    this.subDataThree = this.authService.addRolePermission(data).subscribe({
       next: (res) => {
         this.spinner.hide();
         if (res) {
           this.itemToSubmit = [
             { itemToUpdate: [], itemToDelete: [] },
             { role_id: Number }
-        
+
           ]
           console.log('role permission added successfully')
 
@@ -286,13 +276,13 @@ export class EditPermissionComponent implements OnInit {
   //get data form api 
   getAllPermission(id) {
     this.spinner.show();
-    this.subDataFour =  this.authService.getAllRolePermission(id).subscribe({
+    this.subDataFour = this.authService.getAllRolePermission(id).subscribe({
       next: (res) => {
         this.spinner.hide();
         if (res) {
           this.anotherFunc(res)
           console.log('data fatched successfully');
-          
+
         } else {
           console.log('Error! Please try again.');
         }
@@ -304,27 +294,28 @@ export class EditPermissionComponent implements OnInit {
   }
 
   anotherFunc(res) {
-    res['data'].map((m:any)=> {
+    res['data'].map((m: any) => {
       if (this.allPermissionGroup?.length > 0) {
-        this.allPermissionGroup.map((item:any)=> {
+        this.allPermissionGroup.map((item: any) => {
           if (item.id === m.permission_group_id) {
             item.checked = true;
             item['permission_group_items'].forEach((elm) => {
-                if (m?.permission === elm?.itemData?.permission) {
-                  elm.isChecked = true;
-                }
+              if (m?.permission === elm?.itemData?.permission) {
+                elm.isChecked = true;
+              }
             });
           }
         })
       }
     })
     this.allRolePermisson = res['data'];
-    this.getCheckedData = res['data']; 
+    this.getCheckedData = res['data'];
     this.getCheckedData = this.allPermissionGroup;
   }
 
+  //when click check all permission
 
-  checkAllP(event) {
+  checkAllPermission(event) {
     console.log(event.checked)
     if (event.checked === true && this.getCheckedData?.length > 0) {
       this.isButtonDisabled = false;
