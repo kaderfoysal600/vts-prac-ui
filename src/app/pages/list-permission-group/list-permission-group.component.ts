@@ -1,5 +1,7 @@
-import { Component, OnInit } from '@angular/core';
+import { AfterViewInit, Component, OnInit, ViewChild } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
+import { MatPaginator } from '@angular/material/paginator';
+import { MatTableDataSource } from '@angular/material/table';
 import { Subscription } from 'rxjs';
 import { PermissionGroupDialogComponent } from 'src/app/dialog/permission-group-dialog/permission-group-dialog.component';
 import { AuthService } from 'src/app/service/auth.service';
@@ -10,10 +12,13 @@ import { UiService } from 'src/app/service/ui.service';
   templateUrl: './list-permission-group.component.html',
   styleUrls: ['./list-permission-group.component.scss']
 })
-export class ListPermissionGroupComponent implements OnInit {
+export class ListPermissionGroupComponent implements OnInit{
 
   allPermissionGroup
   buttonDisabled :Boolean = false;
+  displayedColumns: string[] = ['name', 'weight', 'symbol', 'position'];
+  dataSource: MatTableDataSource<any>; 
+   @ViewChild(MatPaginator) paginator: MatPaginator;
   // Subscriptions
   private subDataOne: Subscription;
   private subDataTwo: Subscription;
@@ -24,13 +29,14 @@ export class ListPermissionGroupComponent implements OnInit {
     private authService: AuthService,
     private dialog: MatDialog,
     private uiService: UiService,
-  ) { }
+   
+  ) {
+
+   }
 
   ngOnInit(): void {
     this.getAllPermissionGroup()
-
   }
-
 
   getAllPermissionGroup() {
   this.subDataOne = this.authService.getAllPermissionGroup().subscribe({
@@ -38,6 +44,8 @@ export class ListPermissionGroupComponent implements OnInit {
         if (res) {
           this.allPermissionGroup = res
           console.log(res)
+          this.dataSource = new MatTableDataSource(this.allPermissionGroup);
+          this.dataSource.paginator = this.paginator;
         } else {
           console.log('Error! Please try again.')
         }
@@ -47,6 +55,7 @@ export class ListPermissionGroupComponent implements OnInit {
       }
     })
   }
+
 
   public openEditControllerDialog(data?: any) {
     console.log('dialogResult.data', data)

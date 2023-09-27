@@ -4,6 +4,7 @@ import { Subscription } from 'rxjs';
 import { PermissionGroupItemDialogComponent } from 'src/app/dialog/permission-group-item-dialog/permission-group-item-dialog.component';
 import { AuthService } from 'src/app/service/auth.service';
 import { UiService } from 'src/app/service/ui.service';
+import { UserDataService } from 'src/app/shared/service/user-data.service';
 
 @Component({
   selector: 'app-list-permission-group-item',
@@ -14,6 +15,9 @@ export class ListPermissionGroupItemComponent implements OnInit {
 
   allPermissionGroupItem:any= null;
   allPermissionGroup:any= null;
+  loggedInUserRolePermission: any;
+    // Pagination
+    p: number = 1;
   // Subscriptions
   private subDataOne: Subscription;
   private subDataTwo: Subscription;
@@ -24,11 +28,16 @@ export class ListPermissionGroupItemComponent implements OnInit {
     private authService: AuthService,
     private dialog: MatDialog,
     private uiService: UiService,
+    private userDataService: UserDataService
+    
   ) { }
 
   ngOnInit(): void {
     this.getAllPermissionGroupItem()
     this.getAllPermissionGroup();
+    this.loggedInUserRolePermission = this.userDataService.getLoggedInUserRolePermission();
+    console.log(' this.loggedInUserRolePermission',  this.loggedInUserRolePermission);
+    
 
   }
 

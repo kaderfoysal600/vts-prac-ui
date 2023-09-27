@@ -70,9 +70,12 @@ export class ListUserComponent implements OnInit {
         next: (res) => {
           if (res) {
             this.spinner.hide();
-            this.allUser = res
+            // this.allUser = res
             console.log('res', res)
-            this.getAllUserWithRoleName()
+            if(this.allRole.length>0){
+              this.getAllUserWithRoleName(res)
+            }
+         
 
           } else {
             console.log('Error! Please try again.')
@@ -129,30 +132,50 @@ export class ListUserComponent implements OnInit {
 
   updateloggedInUserRolePermission() {
     this.loggedInUserRolePermission.forEach((item: any) => {
-      if (item.permission == 'user_add') {
+    switch (item.permission) {
+      case 'user_add':
         this.addUserPermission = true;
-      }
-      if (item.permission == 'user_edit') {
+        break;
+      case 'user_edit':
         this.editUserPermission = true;
-      }
-      if (item.permission == 'user_delete') {
+        break;
+      case 'user_delete':
         this.deleteUserPermission = true;
-      }
-      if (item.permission == 'user_export') {
+        break;
+      case 'user_export':
         this.exportUserPermission = true;
-      }
+        break;
+      // Add more cases for other permissions if needed
+      default:
+        break;
+    }
     })
 
   }
 
-  getAllUserWithRoleName() {
-    this.allUser.map((user) => {
-      this.allRole.map(role => {
-        if (user.role_id === role.id) {
-          user["role_name"] = role.name;
-        }
-      });
-    })
+  // getAllUserWithRoleName(totalUser) {
+  // totalUser.map((user) => {
+  //     this.allRole.map(role => {
+  //       if (user.role_id === role.id) {
+  //         user["role_name"] = role.name;
+  //       }
+  //     });
+  //   })
+  //   this.allUser = totalUser;
+  // }
+
+
+  getAllUserWithRoleName(totalUser) {
+    const usersWithRoleName = totalUser.map((user) => {
+      const matchingRole = this.allRole.find((role) => user.role_id === role.id);
+      if (matchingRole) {
+        return { ...user, role_name: matchingRole.name };
+      } else {
+        return user;
+      }
+    });
+  
+    this.allUser = usersWithRoleName;
   }
 
   public openEditControllerDialog(data?: any) {

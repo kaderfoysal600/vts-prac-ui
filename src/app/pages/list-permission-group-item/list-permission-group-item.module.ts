@@ -5,7 +5,7 @@ import { ListPermissionGroupItemRoutingModule } from './list-permission-group-it
 import { ListPermissionGroupItemComponent } from './list-permission-group-item.component';
 import { PermissionGroupItemDialogModule } from 'src/app/dialog/permission-group-item-dialog/permission-group-item-dialog.module';
 import { MatButtonModule } from '@angular/material/button';
-
+import {NgxPaginationModule} from "ngx-pagination";
 
 @NgModule({
   declarations: [
@@ -15,7 +15,8 @@ import { MatButtonModule } from '@angular/material/button';
     CommonModule,
     ListPermissionGroupItemRoutingModule,
     PermissionGroupItemDialogModule,
-    MatButtonModule
+    MatButtonModule,
+    NgxPaginationModule
   ]
 })
 export class ListPermissionGroupItemModule { }
