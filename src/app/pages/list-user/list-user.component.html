@@ -1,45 +1,83 @@
 <div class="section-1">
 
-<div class="container">
-  <!-- (click)="openEditControllerDialog()" -->
-  <button mat-raised-button color="accent" class="add-user" routerLink="/create-user">Add New User</button>
-  <h1>Data of All User</h1>
-  <table>
-    <tr>
-      <th>Image</th>
-      <th>First Name </th>
-      <th>Last Name</th>
-      <th>Name</th>
-      <th>Role Name</th>
-      <th>Email</th>
-      <th>Gender</th>
-      <th>Mobile No.</th>
-      <th>Address</th>
-      <th>Actions</th>
-      <th>Created Time</th>
-    </tr>
-    <tr *ngFor="let data of allUser">
-      <td>
-        <img src="http://localhost:3000/{{data?.photo}}" alt="User Image">
-        <!-- <img src="http://localhost:3000/uploads/1693721772278-1692065410221.jpeg" alt="Uploaded Image" /> -->
-      </td>
-      <td>{{data?.first_name}}</td>
-      <td>{{data?.last_name}}</td> 
-      <td>{{data?.first_name}} {{data?.last_name}} </td>
-      <td>{{data?.role_name}}</td>
-      <td>{{data?.email}}</td>
-      <td>{{data?.gender}}</td>
-      <td>{{data?.mobile}}</td>
-      <td>{{data?.address}}</td>
-      <td>{{data?.created_time | date}}</td>
-  
-  
-      <td class="td-action">
-        <!-- openEditControllerDialog(data) -->
-  <button (click)="editUser(data)">Edit</button>
-  <button (click)="deleteUser(data.id)">Delete</button>
-      </td>
-    </tr>
-  </table>
+
+
+  <div class="container">
+    <!-- (click)="openEditControllerDialog()" -->
+
+
+    <div class="top-flex">
+      <button *ngIf="addUserPermission" mat-raised-button color="accent" class="add-user" routerLink="/create-user">Add New User</button>
+      <div class="export">
+        <div  *ngIf="exportUserPermission" class="export-container">
+          <button mat-raised-button color="primary" (click)="exportTable()">Export As Pdf</button>
+        </div>
+        <div  *ngIf="exportUserPermission" class="export-container">
+          <!-- <button mat-raised-button color="warn" (click)="exportXlTable()">Export As XL</button> -->
+          <button mat-raised-button color="warn" (click)="exportXlTable2()">Export As XL</button>
+        </div>
+
+
+     
+      </div>
+
+    </div>
+
+
+    <h1>Data of All User</h1>
+    <table id="ExampleTable">
+      <tr>
+        <th>Image</th>
+        <th>First Name</th>
+        <th>Last Name</th>
+        <th>Name</th>
+        <th>Role Name</th>
+        <th>Email</th>
+        <th>Gender</th>
+        <th>Mobile No.</th>
+        <th>Address</th>
+        <th>Created Time</th>
+        <th>Actions</th>
+      </tr>
+      <tr 
+      *ngFor="let data of allUser | paginate: { itemsPerPage: 3, currentPage: p }"
+      >
+        <td>
+          <img class="pdf-image" src="http://localhost:3000/{{data?.photo}}" alt="User Image">
+        </td>
+        <td class="td-first-name">{{data?.first_name}}</td>
+        <td class="td-last-name">{{data?.last_name}}</td>
+        <td class="full-name">{{data?.first_name}} {{data?.last_name}} </td>
+        <td>{{data?.role_name}}</td>
+        <td>{{data?.email}}</td>
+        <td>{{data?.gender}}</td>
+        <td>{{data?.mobile}}</td>
+        <td>{{data?.address}}</td>
+        <td class="full-date">{{data?.created_time | date}}</td>
+
+
+        <td class="td-action">
+          <!-- openEditControllerDialog(data) -->
+          <button mat-icon-button color="primary"  *ngIf="editUserPermission" (click)="editUser(data)" class="edit-button">
+            <mat-icon>edit</mat-icon>
+          </button>
+          <button mat-icon-button color="warn" *ngIf="deleteUserPermission" (click)="deleteUser(data.id)" class="delete-button">
+            <mat-icon>delete</mat-icon>
+          </button>
+        </td>
+      </tr>
+    </table>
+
+
+  <div class="data-pagination">
+    <pagination-controls (pageChange)="p = $event"></pagination-controls>
+  </div>
+  </div>
 </div>
-</div>
+
+
+<!-- TEMPLATE NGX SPINNER-->
+<ngx-spinner style="width: 100vw; height: 100vh" bdColor="rgba(0,0,0,0.25)" size="medium" color="#fff"
+  type="ball-clip-rotate" [fullScreen]="true">
+  <p style="color: white"> Loading... </p>
+</ngx-spinner>

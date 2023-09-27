@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
+import { NgxSpinnerService } from 'ngx-spinner';
 import { Subscription } from 'rxjs';
 import { AuthService } from 'src/app/service/auth.service';
 import { UiService } from 'src/app/service/ui.service';
@@ -10,6 +11,7 @@ interface LoginResponse {
   data: {
     id: number;
     email: string;
+    role:any;
     accessToken: string;
     // You can include other properties if they are present in the actual response
   };
@@ -34,6 +36,7 @@ export class LoginComponent implements OnInit {
     private authService: AuthService,
     public router: Router,
     private uiService: UiService,
+    private spinner: NgxSpinnerService,
   ) { }
 
   ngOnInit(): void {
@@ -47,6 +50,7 @@ export class LoginComponent implements OnInit {
 
 
   onLogin() {
+    this.spinner.show();
     if (this.loginForm.invalid) {
       console.log('Invalid Input field!');
       return;
@@ -58,23 +62,29 @@ export class LoginComponent implements OnInit {
 
 
     this.subDataOne = this.authService.onLogin(data).subscribe({
+      
       next: (res: LoginResponse) => {
         if (res) {
+    
           console.log('res', res);
           console.log('login successfully')
           sessionStorage.setItem('token', res?.data?.accessToken)
           sessionStorage.setItem('email', res?.data?.email)
+          sessionStorage.setItem('role', res?.data?.role)
+          this.spinner.hide();
           // this.getPDtata()
           this.uiService.success('You are successfully logged in');
           this.router.navigate(['/', 'list-user']);
 
         } else {
           console.log('Error! Please try again.')
+          
         }
       },
       error: (err) => {
         console.log(err)
         this.uiService.wrong(err?.error?.error);
+        this.spinner.hide();
       }
     })
   }

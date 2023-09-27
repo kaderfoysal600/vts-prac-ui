@@ -83,6 +83,7 @@ export class EditPermissionComponent implements OnInit {
       },
       error: (err) => {
         console.log(err)
+        this.spinner.hide();
       }
     })
   }

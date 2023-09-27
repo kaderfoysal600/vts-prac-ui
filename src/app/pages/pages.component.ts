@@ -7,10 +7,11 @@ import { Router } from '@angular/router';
   styleUrls: ['./pages.component.scss']
 })
 export class PagesComponent implements OnInit {
-
+loggedInEmail :any;
   constructor( public router: Router) { }
 
   ngOnInit(): void {
+    this.loggedInEmail = sessionStorage.getItem('email')
   }
   onLogOut(){
     sessionStorage.removeItem('token');

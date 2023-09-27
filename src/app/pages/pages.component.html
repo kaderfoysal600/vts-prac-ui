@@ -15,11 +15,15 @@
         <!-- <li>
             <a routerLink="/list-role-permission" routerLinkActive="active"> Role Permission</a>
         </li> -->
+    
 
         <li>
             <a style="cursor:pointer" (click)="onLogOut()" > Logout</a>
         </li>
+        <h3>Hello - {{loggedInEmail}}</h3>
     </ul>
+
+
 </header>
 
 <router-outlet></router-outlet>

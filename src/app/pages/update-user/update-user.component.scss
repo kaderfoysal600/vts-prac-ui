@@ -78,7 +78,8 @@
   
   /* Style the file name display */
   .file-up .file-name {
-    font-size: 16px;
+    font-size: 14px;
+    line-height: 15px;
     color: #333;
     text-align: center;
   }
@@ -102,4 +103,14 @@
 ::ng-deep .mat-form-field-appearance-outline.mat-form-field-can-float.mat-form-field-should-float .mat-form-field-label {
     transform: translateY(-1.1em) scale(.75);
     width: 133.33333%;
+}
+
+.update-top{
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  a{
+    color: #0056b3;
+    font-size: 16px;
+  }
 }

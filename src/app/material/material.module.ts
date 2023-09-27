@@ -25,6 +25,7 @@ import {MatBottomSheetModule} from '@angular/material/bottom-sheet';
 import {DragDropModule} from '@angular/cdk/drag-drop';
 import { ReactiveFormsModule } from '@angular/forms';
 import {MatTableModule} from '@angular/material/table';
+import { MatPaginatorModule } from '@angular/material/paginator';
 // import { NgxSpinnerModule } from 'ngx-spinner';
 
 
@@ -55,7 +56,8 @@ const materials = [
   DragDropModule,
   ReactiveFormsModule,
   MatExpansionModule,
-  MatTableModule
+  MatTableModule,
+  MatPaginatorModule
   // NgxSpinnerModule
 ];
 

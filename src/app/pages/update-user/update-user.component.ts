@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { ActivatedRoute, Router } from '@angular/router';
+import { NgxSpinnerService } from 'ngx-spinner';
 import { Subscription } from 'rxjs';
 import { AuthService } from 'src/app/service/auth.service';
 
@@ -20,6 +21,7 @@ export class UpdateUserComponent implements OnInit {
   loginForm: FormGroup;
   allGender: string[] = ['Male', 'Female', 'Other',];
   Id: string;
+  oldPhoto:any;
   // Subscriptions
   private subDataOne: Subscription;
   private subDataTwo: Subscription;
@@ -30,7 +32,8 @@ export class UpdateUserComponent implements OnInit {
     public router: Router,
     private fb: FormBuilder,
     private _route: ActivatedRoute,
-    private _snackBar: MatSnackBar
+    private _snackBar: MatSnackBar,
+    private spinner: NgxSpinnerService,
   ) { }
 
   ngOnInit(): void {
@@ -57,6 +60,7 @@ export class UpdateUserComponent implements OnInit {
   }
 
   getUserById() {
+    this.spinner.show();
     this.subDataOne = this.authService.getAllUser().subscribe({
       next: (res) => {
         if (res) {
@@ -67,6 +71,7 @@ export class UpdateUserComponent implements OnInit {
           console.log('this.singleUser.photo', this.singleUser.photo);
 
           this.selectedFile = this.singleUser.photo
+          this.spinner.hide();
 
         } else {
           console.log('Error! Please try again.')
@@ -74,6 +79,7 @@ export class UpdateUserComponent implements OnInit {
       },
       error: (err) => {
         console.log(err)
+        this.spinner.hide();
       }
     })
   }
@@ -95,11 +101,13 @@ export class UpdateUserComponent implements OnInit {
 
 
   getRoleData() {
+    this.spinner.show();
     this.subDataTwo = this.authService.getAllrole().subscribe({
       next: (res) => {
         if (res) {
           this.allRoles = res
           console.log(res)
+          this.spinner.hide();
 
         } else {
           console.log('Error! Please try again.')
@@ -107,11 +115,14 @@ export class UpdateUserComponent implements OnInit {
       },
       error: (err) => {
         console.log(err)
+        this.spinner.hide();
       }
     })
   }
 
   setUser(data) {
+    console.log('old data', data);
+    this.oldPhoto = data?.photo
     //console.log(sim); //[0]  added
     this.loginForm.patchValue({
       first_name: data.first_name,
@@ -121,7 +132,7 @@ export class UpdateUserComponent implements OnInit {
       address: data.address,
       role_id: data.role_id
       , gender: data.gender,
-      photo: data.photo,
+      photo: data?.photo,
       password: data.password,
     });
   }
@@ -129,6 +140,7 @@ export class UpdateUserComponent implements OnInit {
 * Login
 */
   onUpdate() {
+    this.spinner.show();
     if (this.loginForm.invalid) {
       console.log('Invalid Input field!');
       return;
@@ -143,12 +155,24 @@ export class UpdateUserComponent implements OnInit {
     formData.append('role_id', this.loginForm.get('role_id').value);
     formData.append('gender', this.loginForm.get('gender').value);
     formData.append('password', this.loginForm.get('password').value);
-    formData.append('photo', this.images);
+    if (this.images == undefined) {
+      formData.append('photo',this.oldPhoto);
+      console.log("formData.append('photo',this.oldPhoto);", formData.append('photo',this.oldPhoto));
+      
+      console.log('eeeeeee')
+    }
+    else if(this.images){
+      console.log('this.images', this.images)
+      formData.append('photo', this.images);
+    }
+    console.log('this.images', this.images);
+
     console.log('log from data from frontend', formData);
 
     this.subDataThree = this.authService.updateUserById(this.Id, formData).subscribe({
       next: (res) => {
         if (res) {
+          this.spinner.hide();
           console.log('res from api', res)
           console.log('login successfully');
           this._snackBar.open('User Updated Successfully', '', {
@@ -162,6 +186,10 @@ export class UpdateUserComponent implements OnInit {
       },
       error: (err) => {
         console.log(err)
+        this.spinner.hide();
+        this._snackBar.open('Something Went wrong', '', {
+          duration: 1000
+        })
       }
     })
   }
