@@ -51,49 +51,18 @@ export class ListPermissionGroupItemComponent implements OnInit {
     // this.getAllPermissionGroupItem()
     // this.getAllPermissionGroup();
     this.loggedInUserRolePermission = this.userDataService.getLoggedInUserRolePermission();
-    console.log(' this.loggedInUserRolePermission', this.loggedInUserRolePermission);
     this.getAllPermissionGroupItemExtra(null)
   }
 
-
-  // getAllPermissionGroupItem() {
-  //   this.subDataOne = this.authService.getAllPermissionGroupItem().subscribe({
-  //     next: (res) => {
-  //       if (res) {
-  //         this.allPermissionGroupItem = res
-  //         this.getAllPermissionGroup()
-  //         this.page =  0;
-  //         this.totalItems = this.allPermissionGroupItem.length;
-  //         // this.dataSource = res
-
-  //         this.updateDataSource(this.allPermissionGroupItem)
-  //         console.log(res)
-  //       } else {
-  //         console.log('Error! Please try again.')
-  //       }
-  //     },
-  //     error: (err) => {
-  //       console.log(err)
-  //     }
-  //   })
-  // }
-
-
-
-
   getAllPermissionGroupItemExtra(page:any) {
-    console.log('page', page);
     
     this.subDataOne = this.authService.getAllPermissionGroupItem1(page, this.itemsPerPage).subscribe({
       next: (res) => {
         if (res) {
-          console.log('ressss', res);
-          
+          console.log('allPermissionGroupItem', res);
           this.allPermissionGroupItem = res['data'];
           this.getAllPermissionGroup()
-          // this.page =  0;
           this.totalItems = res['totalData'];
-          console.log('this.allPermissionGroupItem', this.allPermissionGroupItem);
           this.updateDataSource(this.allPermissionGroupItem)
 
         } else {
@@ -119,7 +88,7 @@ export class ListPermissionGroupItemComponent implements OnInit {
               }
             });
           });
-          console.log(res)
+          // console.log(res)
 
         } else {
           console.log('Error! Please try again.')
