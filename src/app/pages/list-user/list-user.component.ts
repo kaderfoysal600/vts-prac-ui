@@ -63,31 +63,6 @@ export class ListUserComponent implements OnInit {
     this.LoggedInUserRoleId = sessionStorage.getItem('role');
     console.log(' this.LoggedInUserRoleId', this.LoggedInUserRoleId);
   }
-  getAllUser() {
-    this.spinner.show();
-    this.subDataOne =
-      this.authService.getAllUser().subscribe({
-        next: (res) => {
-          if (res) {
-            this.spinner.hide();
-            // this.allUser = res
-            console.log('res', res)
-            if(this.allRole.length>0){
-              this.getAllUserWithRoleName(res)
-            }
-         
-
-          } else {
-            console.log('Error! Please try again.')
-          }
-        },
-        error: (err) => {
-          console.log(err)
-          this.spinner.hide();
-        }
-      })
-  }
-
   getAllRole() {
     this.spinner.show();
     this.subDataFour = this.authService.getAllrole().subscribe({
@@ -107,6 +82,29 @@ export class ListUserComponent implements OnInit {
       }
     })
   }
+
+  getAllUser() {
+    this.spinner.show();
+    this.subDataOne =
+      this.authService.getAllUser().subscribe({
+        next: (res) => {
+          if (res) {
+            this.spinner.hide();
+            // this.allUser = res
+            console.log('res', res)
+              this.getAllUserWithRoleName(res)
+          } else {
+            console.log('Error! Please try again.')
+          }
+        },
+        error: (err) => {
+          console.log(err)
+          this.spinner.hide();
+        }
+      })
+  }
+
+
 
   getLogedInUserPermission() {
     this.spinner.show();

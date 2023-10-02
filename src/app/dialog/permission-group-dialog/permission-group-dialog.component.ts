@@ -2,10 +2,7 @@ import { Component, Inject, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup, NgForm, Validators } from '@angular/forms';
 import { MAT_DIALOG_DATA, MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { AuthService } from 'src/app/service/auth.service';
-interface Status {
-  value: string;
-  viewValue: string;
-}
+
 @Component({
   selector: 'app-permission-group-dialog',
   templateUrl: './permission-group-dialog.component.html',
@@ -17,9 +14,9 @@ export class PermissionGroupDialogComponent implements OnInit {
 dataForm?: FormGroup;
 // Store Data+
 permissionGroupData: any;
-allStatus: Status[] = [
-  {value: '1', viewValue: 'Active'},
-  {value: '2', viewValue: 'Inactive'}
+allStatus: any[] = [
+  {value: 1, viewValue: 'Active'},
+  {value: 0, viewValue: 'Inactive'}
 ];
 constructor(
   private fb: FormBuilder,

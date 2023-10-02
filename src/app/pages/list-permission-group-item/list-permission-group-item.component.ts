@@ -1,5 +1,8 @@
-import { Component, OnInit } from '@angular/core';
+import { CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop';
+import { HttpClient } from '@angular/common/http';
+import { ChangeDetectorRef, Component, OnInit, ViewChild } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
+import { MatTable } from '@angular/material/table';
 import { Subscription } from 'rxjs';
 import { PermissionGroupItemDialogComponent } from 'src/app/dialog/permission-group-item-dialog/permission-group-item-dialog.component';
 import { AuthService } from 'src/app/service/auth.service';
@@ -13,12 +16,22 @@ import { UserDataService } from 'src/app/shared/service/user-data.service';
 })
 export class ListPermissionGroupItemComponent implements OnInit {
 
-  allPermissionGroupItem:any= null;
-  allPermissionGroup:any= null;
+  allPermissionGroupItem: any = null;
+  allPermissionGroup: any = null;
   loggedInUserRolePermission: any;
-    // Pagination
-    p: number = 1;
+  // Pagination
+  page: number = 1;
+  itemsPerPage = 5;
+  totalItems : any; 
   // Subscriptions
+
+  dataSource
+  displayedColumns = ['id', 'group', 'name', 'permission', 'weight', 'status', 'action'];
+  states = [{ id: 0, value: 'Inactive' }, { id: 1, value: 'Active' }];
+
+  // @ViewChild(MatSort) sort: MatSort;
+  @ViewChild('table') table: MatTable<any>;
+
   private subDataOne: Subscription;
   private subDataTwo: Subscription;
   private subDataThree: Subscription;
@@ -28,28 +41,60 @@ export class ListPermissionGroupItemComponent implements OnInit {
     private authService: AuthService,
     private dialog: MatDialog,
     private uiService: UiService,
-    private userDataService: UserDataService
-    
+    private userDataService: UserDataService,
+    private changeDetectorRef: ChangeDetectorRef,
+    public http: HttpClient
+
   ) { }
 
   ngOnInit(): void {
-    this.getAllPermissionGroupItem()
-    this.getAllPermissionGroup();
+    // this.getAllPermissionGroupItem()
+    // this.getAllPermissionGroup();
     this.loggedInUserRolePermission = this.userDataService.getLoggedInUserRolePermission();
-    console.log(' this.loggedInUserRolePermission',  this.loggedInUserRolePermission);
-    
-
+    console.log(' this.loggedInUserRolePermission', this.loggedInUserRolePermission);
+    this.getAllPermissionGroupItemExtra(null)
   }
 
 
-  getAllPermissionGroupItem() {
-  this.subDataOne = this.authService.getAllPermissionGroupItem().subscribe({
+  // getAllPermissionGroupItem() {
+  //   this.subDataOne = this.authService.getAllPermissionGroupItem().subscribe({
+  //     next: (res) => {
+  //       if (res) {
+  //         this.allPermissionGroupItem = res
+  //         this.getAllPermissionGroup()
+  //         this.page =  0;
+  //         this.totalItems = this.allPermissionGroupItem.length;
+  //         // this.dataSource = res
+
+  //         this.updateDataSource(this.allPermissionGroupItem)
+  //         console.log(res)
+  //       } else {
+  //         console.log('Error! Please try again.')
+  //       }
+  //     },
+  //     error: (err) => {
+  //       console.log(err)
+  //     }
+  //   })
+  // }
+
+
+
+
+  getAllPermissionGroupItemExtra(page:any) {
+    console.log('page', page);
+    
+    this.subDataOne = this.authService.getAllPermissionGroupItem1(page, this.itemsPerPage).subscribe({
       next: (res) => {
         if (res) {
-          this.allPermissionGroupItem = res
+          console.log('ressss', res);
+          
+          this.allPermissionGroupItem = res['data'];
           this.getAllPermissionGroup()
-     
-          console.log(res)
+          // this.page =  0;
+          this.totalItems = res['totalData'];
+          console.log('this.allPermissionGroupItem', this.allPermissionGroupItem);
+          this.updateDataSource(this.allPermissionGroupItem)
 
         } else {
           console.log('Error! Please try again.')
@@ -64,27 +109,27 @@ export class ListPermissionGroupItemComponent implements OnInit {
 
   getAllPermissionGroup() {
     this.subDataFive = this.authService.getAllPermissionGroup().subscribe({
-        next: (res) => {
-          if (res) {
-            this.allPermissionGroup = res
-            this.allPermissionGroupItem.forEach((item1: any) => {
-              this.allPermissionGroup.forEach((item) => {
-                if (item.id === item1.permission_group_id) {
-                  item1.permission_group_name = item.name
-                }
-              });
+      next: (res) => {
+        if (res) {
+          this.allPermissionGroup = res
+          this.allPermissionGroupItem.forEach((item1: any) => {
+            this.allPermissionGroup.forEach((item) => {
+              if (item.id === item1.permission_group_id) {
+                item1.permission_group_name = item.name
+              }
             });
-            console.log(res)
-  
-          } else {
-            console.log('Error! Please try again.')
-          }
-        },
-        error: (err) => {
-          console.log(err)
+          });
+          console.log(res)
+
+        } else {
+          console.log('Error! Please try again.')
         }
-      })
-    }
+      },
+      error: (err) => {
+        console.log(err)
+      }
+    })
+  }
 
 
 
@@ -115,7 +160,7 @@ export class ListPermissionGroupItemComponent implements OnInit {
           if (res) {
             console.log('Permission Group Item added successfully', res)
             this.uiService.success('Permission Group Item added successfully');
-            this.getAllPermissionGroupItem()
+            // this.getAllPermissionGroupItem()
           } else {
             console.log('Error! Please try again.')
           }
@@ -129,12 +174,12 @@ export class ListPermissionGroupItemComponent implements OnInit {
 
 
   public updatePermissionGroupItem(id: string, data: any) {
-    this.subDataThree =  this.authService.updatePermissionGroupItem(id, data).subscribe({
+    this.subDataThree = this.authService.updatePermissionGroupItem(id, data).subscribe({
       next: (res) => {
         console.log(res);
         this.uiService.success('Permission Group Item Updated successfully');
         if (res) {
-          this.getAllPermissionGroupItem()
+          this.getAllPermissionGroupItemExtra(null)
         }
       },
       error: (err) => {
@@ -150,7 +195,7 @@ export class ListPermissionGroupItemComponent implements OnInit {
         console.log(res);
         this.uiService.success('Permission Group Item deleted successfully');
         if (res) {
-          this.getAllPermissionGroupItem()
+          this.getAllPermissionGroupItemExtra(null)
         }
       },
       error: (err) => {
@@ -159,23 +204,61 @@ export class ListPermissionGroupItemComponent implements OnInit {
     });
   }
 
+  dropTable(event: CdkDragDrop<any[]>) {
+    const prevIndex = this.dataSource.findIndex((d) => d === event.item.data);
+    moveItemInArray(this.dataSource, prevIndex, event.currentIndex);
+    this.table.renderRows();
+  }
 
-   /**
-   * ON DESTROY
-   */
- ngOnDestroy() {
-  if (this.subDataOne) {
-    this.subDataOne.unsubscribe();
+  onSelectGroup(e) {
+    this.updateDataSource(this.allPermissionGroupItem)
+    console.log('eeeee', e);
+    let x = this.dataSource.filter((item) => {
+      return e.id === item?.permission_group_id
+    })
+    this.updateDataSource(x)
+
+    // this.dataSource = x
+    // console.log('this.dataSource', x);
+
   }
-  if (this.subDataTwo) {
-    this.subDataTwo.unsubscribe();
+
+
+  updateDataSource(newData: any[]) {
+    this.dataSource = newData;
+
+    // Notify the MatTable that the data has changed
+    this.changeDetectorRef.detectChanges();
   }
-  if (this.subDataThree) {
-    this.subDataThree.unsubscribe();
+
+  applyFilter(event: Event) {
+    const filterValue = (event.target as HTMLInputElement).value;
+    this.updateDataSource(this.allPermissionGroupItem)
+    console.log('eeeee', event);
+    let x = this.dataSource.filter((item) => item.name.toLowerCase().includes(filterValue))
+    this.updateDataSource(x)
   }
-  if (this.subDataFour) {
-    this.subDataFour.unsubscribe();
+
+  onClearFilter() {
+    this.updateDataSource(this.allPermissionGroupItem)
+    console.log('asaaaa')
   }
-}
+  /**
+  * ON DESTROY
+  */
+  ngOnDestroy() {
+    if (this.subDataOne) {
+      this.subDataOne.unsubscribe();
+    }
+    if (this.subDataTwo) {
+      this.subDataTwo.unsubscribe();
+    }
+    if (this.subDataThree) {
+      this.subDataThree.unsubscribe();
+    }
+    if (this.subDataFour) {
+      this.subDataFour.unsubscribe();
+    }
+  }
 
 }

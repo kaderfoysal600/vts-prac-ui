@@ -19,7 +19,7 @@ import { MatPaginatorModule } from '@angular/material/paginator';
     ListPermissionGroupRoutingModule,
     MatButtonModule,
     MaterialModule,
-    MatPaginatorModule
+    MatPaginatorModule,
   ]
 })
 export class ListPermissionGroupModule { }

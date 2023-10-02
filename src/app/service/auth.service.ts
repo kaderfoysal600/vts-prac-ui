@@ -52,6 +52,9 @@ export class AuthService {
   getAllPermissionGroupItem() {
     return this.http.get('http://localhost:3000/api/getPermissionGroupItems');
   }
+  getAllPermissionGroupItem1(page, size) {
+    return this.http.get(`http://localhost:3000/api/getPermissionGroupItems1?page=${page}&size=${size}`);
+  }
   deletePermissionGroupItem(id: string) {
     return this.http.delete('http://localhost:3000/api/deletePermissionGroupItem/' + id);
   }
