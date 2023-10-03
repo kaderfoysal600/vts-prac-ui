@@ -9,6 +9,7 @@ import {NgxPaginationModule} from "ngx-pagination";
 import { MaterialModule } from 'src/app/material/material.module';
 import { MatTableModule } from '@angular/material/table';
 import { HttpClientModule } from '@angular/common/http';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
 @NgModule({
   declarations: [
@@ -23,6 +24,8 @@ import { HttpClientModule } from '@angular/common/http';
     MaterialModule,
     MatTableModule,
     HttpClientModule,
+    FormsModule,
+    ReactiveFormsModule
   ]
 })
 export class ListPermissionGroupItemModule { }

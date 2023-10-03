@@ -1,8 +1,9 @@
 import { CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop';
 import { HttpClient } from '@angular/common/http';
-import { ChangeDetectorRef, Component, OnInit, ViewChild } from '@angular/core';
+import { ChangeDetectorRef, Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { MatTable } from '@angular/material/table';
+import { NgxSpinnerService } from 'ngx-spinner';
 import { Subscription } from 'rxjs';
 import { PermissionGroupItemDialogComponent } from 'src/app/dialog/permission-group-item-dialog/permission-group-item-dialog.component';
 import { AuthService } from 'src/app/service/auth.service';
@@ -19,10 +20,15 @@ export class ListPermissionGroupItemComponent implements OnInit {
   allPermissionGroupItem: any = null;
   allPermissionGroup: any = null;
   loggedInUserRolePermission: any;
+  
+
+  //store data for search 
+  filteredData
+  groupId
   // Pagination
   page: number = 1;
   itemsPerPage = 5;
-  totalItems : any; 
+  totalItems: any;
   // Subscriptions
 
   dataSource
@@ -31,6 +37,8 @@ export class ListPermissionGroupItemComponent implements OnInit {
 
   // @ViewChild(MatSort) sort: MatSort;
   @ViewChild('table') table: MatTable<any>;
+  @ViewChild('input', { static: false }) input: ElementRef;
+  selectedGroup;
 
   private subDataOne: Subscription;
   private subDataTwo: Subscription;
@@ -43,7 +51,8 @@ export class ListPermissionGroupItemComponent implements OnInit {
     private uiService: UiService,
     private userDataService: UserDataService,
     private changeDetectorRef: ChangeDetectorRef,
-    public http: HttpClient
+    public http: HttpClient,
+    private spinner: NgxSpinnerService,
 
   ) { }
 
@@ -54,11 +63,12 @@ export class ListPermissionGroupItemComponent implements OnInit {
     this.getAllPermissionGroupItemExtra(null)
   }
 
-  getAllPermissionGroupItemExtra(page:any) {
-    
+  getAllPermissionGroupItemExtra(page: any) {
+    this.spinner.show();
     this.subDataOne = this.authService.getAllPermissionGroupItem1(page, this.itemsPerPage).subscribe({
       next: (res) => {
         if (res) {
+          this.spinner.hide();
           console.log('allPermissionGroupItem', res);
           this.allPermissionGroupItem = res['data'];
           this.getAllPermissionGroup()
@@ -66,10 +76,12 @@ export class ListPermissionGroupItemComponent implements OnInit {
           this.updateDataSource(this.allPermissionGroupItem)
 
         } else {
+          this.spinner.hide();
           console.log('Error! Please try again.')
         }
       },
       error: (err) => {
+        this.spinner.hide();
         console.log(err)
       }
     })
@@ -81,6 +93,7 @@ export class ListPermissionGroupItemComponent implements OnInit {
       next: (res) => {
         if (res) {
           this.allPermissionGroup = res
+          console.log('allPermissionGroup', this.allPermissionGroup)
           this.allPermissionGroupItem.forEach((item1: any) => {
             this.allPermissionGroup.forEach((item) => {
               if (item.id === item1.permission_group_id) {
@@ -180,12 +193,14 @@ export class ListPermissionGroupItemComponent implements OnInit {
   }
 
   onSelectGroup(e) {
-    this.updateDataSource(this.allPermissionGroupItem)
-    console.log('eeeee', e);
-    let x = this.dataSource.filter((item) => {
-      return e.id === item?.permission_group_id
-    })
-    this.updateDataSource(x)
+    // this.updateDataSource(this.allPermissionGroupItem)
+
+    this.groupId = e.id
+    // console.log('this.groupId', this.groupId);
+    // let x = this.dataSource.filter((item) => {
+    //   return e.id === item?.permission_group_id
+    // })
+    // this.updateDataSource(x);
 
     // this.dataSource = x
     // console.log('this.dataSource', x);
@@ -201,16 +216,53 @@ export class ListPermissionGroupItemComponent implements OnInit {
   }
 
   applyFilter(event: Event) {
-    const filterValue = (event.target as HTMLInputElement).value;
+    const filterValue = (event.target as HTMLInputElement).value.toLowerCase();
+    this.filteredData = filterValue;
+  }
+
+  itemSearchStart() {
     this.updateDataSource(this.allPermissionGroupItem)
-    console.log('eeeee', event);
-    let x = this.dataSource.filter((item) => item.name.toLowerCase().includes(filterValue))
-    this.updateDataSource(x)
+
+    let searchVal = [];
+    if(this.filteredData && this.groupId){
+      let x = this.dataSource.filter((item) => item.name.toLowerCase().includes(this.filteredData))
+      let y = x.filter((item) => {
+        return this.groupId === item?.permission_group_id
+      })
+      searchVal = [...y];
+    }
+    if( this.filteredData && !this.groupId ){
+      let x = this.dataSource.filter((item) => item.name.toLowerCase().includes(this.filteredData))
+      searchVal = [...x];
+    }
+    if(this.groupId && !this.filteredData ){
+      let y = this.dataSource.filter((item) => {
+        return this.groupId === item?.permission_group_id
+      })
+      searchVal = [...y];
+    }
+    
+
+    console.log('searchVal', searchVal);
+    
+    this.updateDataSource(searchVal);
+
+    // Clear the input field value after searching
+    const inputElement: HTMLInputElement = this.input.nativeElement;
+    inputElement.value = '';
+    this.filteredData = ''; 
+    this.groupId = '';
+    this.selectedGroup = '';
+
   }
 
   onClearFilter() {
+    this.groupId = '';
+    this.filteredData = '';
+    this.selectedGroup = '';
+
     this.updateDataSource(this.allPermissionGroupItem)
-    console.log('asaaaa')
+    console.log('filter data cleared')
   }
   /**
   * ON DESTROY
