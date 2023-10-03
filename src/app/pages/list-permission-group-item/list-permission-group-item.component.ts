@@ -203,10 +203,10 @@ export class ListPermissionGroupItemComponent implements OnInit {
 
     this.dataSource.map((d, index) =>  {
       if (d === event.item.data) {
-        d.weight = event.currentIndex + 1; // Set the weight based on the new position
+        d.weight = d[event.currentIndex-1].weight + 1; // Set the weight based on the new position
       } else if (index >= event.currentIndex) {
         // Update the weight of elements after the dragged item
-        d.weight = index + 1; // Adjust the weight accordingly
+        d.weight = d.weight + 1; // Adjust the weight accordingly
       }
     });
            console.log('UpdatedData', this.dataSource);
