@@ -7,16 +7,6 @@ export interface Select {
   viewValue?: any;
 }
 
-export const STATUS_TYPES: Select[] = [
-  {
-    value: 1,
-    viewValue: 'Active',
-  },
-  {
-    value: 2,
-    viewValue: 'Inactive',
-  },
-];
 
 
 @Component({
@@ -30,7 +20,10 @@ export class PermissionGroupItemDialogComponent implements OnInit {
   dataForm?: FormGroup;
 
     // Static Data
-    allStatus: Select[] = STATUS_TYPES;
+    allStatus: any[] = [
+      {value: 1, viewValue: 'Active'},
+      {value: 0, viewValue: 'Inactive'}
+    ];
     // selectedFood = this.allStatus[1].value;
 
   // Store Data+

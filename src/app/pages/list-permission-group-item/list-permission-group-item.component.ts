@@ -17,6 +17,11 @@ import { UserDataService } from 'src/app/shared/service/user-data.service';
 })
 export class ListPermissionGroupItemComponent implements OnInit {
 
+  allStatus: any[] = [
+    {value: 1, viewValue: 'Active'},
+    {value: 0, viewValue: 'Inactive'}
+  ];
+
   allPermissionGroupItem: any = null;
   allPermissionGroup: any = null;
   loggedInUserRolePermission: any;
@@ -25,6 +30,7 @@ export class ListPermissionGroupItemComponent implements OnInit {
   //store data for search 
   filteredData
   groupId
+  filterStatus
   // Pagination
   page: number = 1;
   itemsPerPage = 5;
@@ -45,6 +51,8 @@ export class ListPermissionGroupItemComponent implements OnInit {
   private subDataThree: Subscription;
   private subDataFour: Subscription;
   private subDataFive: Subscription;
+
+
   constructor(
     private authService: AuthService,
     private dialog: MatDialog,
@@ -57,8 +65,6 @@ export class ListPermissionGroupItemComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
-    // this.getAllPermissionGroupItem()
-    // this.getAllPermissionGroup();
     this.loggedInUserRolePermission = this.userDataService.getLoggedInUserRolePermission();
     this.getAllPermissionGroupItemExtra(null)
   }
@@ -187,8 +193,25 @@ export class ListPermissionGroupItemComponent implements OnInit {
   }
 
   dropTable(event: CdkDragDrop<any[]>) {
+    console.log('event', event);
+    
     const prevIndex = this.dataSource.findIndex((d) => d === event.item.data);
+    console.log('prevIndex', prevIndex);
+    
     moveItemInArray(this.dataSource, prevIndex, event.currentIndex);
+    console.log('event.currentIndex', event.currentIndex);
+
+    this.dataSource.map((d, index) =>  {
+      if (d === event.item.data) {
+        d.weight = event.currentIndex + 1; // Set the weight based on the new position
+      } else if (index >= event.currentIndex) {
+        // Update the weight of elements after the dragged item
+        d.weight = index + 1; // Adjust the weight accordingly
+      }
+    });
+           console.log('UpdatedData', this.dataSource);
+    
+    
     this.table.renderRows();
   }
 
@@ -224,25 +247,53 @@ export class ListPermissionGroupItemComponent implements OnInit {
     this.updateDataSource(this.allPermissionGroupItem)
 
     let searchVal = [];
-    if(this.filteredData && this.groupId){
-      let x = this.dataSource.filter((item) => item.name.toLowerCase().includes(this.filteredData))
-      let y = x.filter((item) => {
-        return this.groupId === item?.permission_group_id
-      })
-      searchVal = [...y];
+    if(this.filteredData ){
+      let x = this.dataSource.filter((item) => item.name.toLowerCase().includes(this.filteredData));
+        searchVal = [...x];
+      if(this.groupId){
+        let y = searchVal.filter((item1) =>  this.groupId === item1?.permission_group_id)
+         searchVal = [...y];
+         console.log('this.filterStatus', this.filterStatus);
+         
+         if(this.filterStatus === 0 || this.filterStatus === 1){
+          let z = searchVal.filter((v)=> v.status === this.filterStatus);
+          console.log('z', z);
+          searchVal = [...z];
+         }
+      }
+      
     }
-    if( this.filteredData && !this.groupId ){
-      let x = this.dataSource.filter((item) => item.name.toLowerCase().includes(this.filteredData))
-      searchVal = [...x];
-    }
-    if(this.groupId && !this.filteredData ){
-      let y = this.dataSource.filter((item) => {
-        return this.groupId === item?.permission_group_id
-      })
-      searchVal = [...y];
-    }
-    
 
+    if(this.groupId &&  this.filterStatus === 0 || this.filterStatus === 1 && !this.filteredData ){
+      let y = this.dataSource.filter((item) => {
+        
+        return this.groupId === item?.permission_group_id
+      })
+      console.log('y', y);
+      searchVal = [...y];
+
+      if(this.filterStatus === 0 || this.filterStatus === 1){
+        let z = searchVal.filter((v)=> v.status === this.filterStatus);
+        console.log('z', z);
+        searchVal = [...z];
+       }
+    }
+
+
+    if( (this.filterStatus === 0 || this.filterStatus === 1 ) && !this.groupId && !this.filteredData ){
+      let z = this.dataSource.filter((v)=> v.status === this.filterStatus);
+      console.log('z', z);
+      searchVal = [...z];
+     }
+
+
+     if( (this.filterStatus === 0 || this.filterStatus === 1 ) && this.filteredData && !this.groupId ){
+      let x = this.dataSource.filter((item) => item.name.toLowerCase().includes(this.filteredData));
+      searchVal = [...x];
+      let z = searchVal.filter((v)=> v.status === this.filterStatus);
+      console.log('z', z);
+      searchVal = [...z];
+     }
     console.log('searchVal', searchVal);
     
     this.updateDataSource(searchVal);
@@ -253,17 +304,29 @@ export class ListPermissionGroupItemComponent implements OnInit {
     this.filteredData = ''; 
     this.groupId = '';
     this.selectedGroup = '';
-
+    this.filterStatus = '';
   }
 
   onClearFilter() {
     this.groupId = '';
     this.filteredData = '';
     this.selectedGroup = '';
+    this.filterStatus = '';
 
     this.updateDataSource(this.allPermissionGroupItem)
     console.log('filter data cleared')
   }
+
+
+  filterData1(data){
+    this.filterStatus = data.value;
+    // this.updateDataSource(this.allPermissionGroupItem);
+    //   let newData = this.dataSource.filter((v)=> v.status === data.value);
+    //   this.filteredData = newData;
+    //   this.updateDataSource(newData)
+  
+  }
+
   /**
   * ON DESTROY
   */

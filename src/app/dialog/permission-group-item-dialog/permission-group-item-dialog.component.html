@@ -35,11 +35,10 @@
             </mat-form-field>
 
 
-
             <mat-form-field>
                 <mat-label>Status</mat-label>
-                <mat-select  formControlName="status"required>
-                    <mat-option *ngFor="let item of allStatus" [value]="item.viewValue">
+                <mat-select formControlName="status" name="status">
+                    <mat-option *ngFor="let item of allStatus" [value]="item.value">
                         {{item.viewValue}}
                     </mat-option>
                 </mat-select>

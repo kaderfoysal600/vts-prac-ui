@@ -166,13 +166,16 @@ export class ListUserComponent implements OnInit {
   getAllUserWithRoleName(totalUser) {
     this.spinner.show();
     const usersWithRoleName = totalUser.map((user) => {
-      const matchingRole = this.allRole?.find((role) => user.role_id === role.id);
-      if (matchingRole) {
-        this.spinner.hide();
-        return { ...user, role_name: matchingRole.name };
-      } else {
-        return user;
+      if(this.allRole){
+        const matchingRole = this.allRole.find((role) => user.role_id === role.id);
+        if (matchingRole) {
+          this.spinner.hide();
+          return { ...user, role_name: matchingRole.name };
+        } else {
+          return user;
+        }
       }
+  
     });
   
     this.allUser = usersWithRoleName;

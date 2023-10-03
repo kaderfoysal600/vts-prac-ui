@@ -213,18 +213,9 @@ export class ListPermissionGroupComponent implements OnInit{
   filterData1(data){
     this.updateDataSource(this.allPermissionGroup)
     this.statusSelected = true;
-    console.log('data.value', data.value);
-    // this.dataSource.filter = filterValue.trim().toLowerCase();
-    if( data.value ===1){
-      let newData = this.dataSource.filteredData.filter((v)=> v.status === 1);
-      this.filteredData = newData;
-      this.updateDataSource(newData)
-    }
-    else if( data.value === 0){
-      let newData = this.dataSource.filteredData.filter((v)=> v.status === 0);
-      this.filteredData = newData;
-      this.updateDataSource(newData)
-    }
+    let newData = this.dataSource.filteredData.filter((v)=> v.status === data.value);
+    this.filteredData = newData;
+    this.updateDataSource(newData)
   }
   onClearFilter(){
     this.updateDataSource(this.allPermissionGroup)
