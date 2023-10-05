@@ -1,7 +1,11 @@
-<div class="container">
+<div class="section-1">
+  <div class="container">
     <div class="login">
-      <h1>Login Here</h1>
-  
+      <div class="img12">
+
+        <img src="../../../assets/Daco_5096993.png" alt="">
+
+      </div>
       <form class="login-form" [formGroup]="loginForm" (ngSubmit)="onLogin()">
         <mat-form-field class="mat-data-input-field" appearance="outline">
           <mat-label>Email</mat-label>
@@ -9,26 +13,26 @@
           <mat-icon matSuffix>person</mat-icon>
           <mat-error>This field is required</mat-error>
         </mat-form-field>
-  
+
         <mat-form-field class="mat-data-input-field" appearance="outline">
           <mat-label>Password</mat-label>
           <input formControlName="password" type="password" matInput placeholder="Enter your password...">
           <mat-icon matSuffix>lock</mat-icon>
           <mat-error>This field is required</mat-error>
         </mat-form-field>
-  
+
         <div class="submit-area">
           <button class="btn-login" mat-raised-button color="primary" type="submit">Login</button>
         </div>
-  
+
       </form>
     </div>
   </div>
+</div>
 
 
-  <!-- TEMPLATE NGX SPINNER-->
+<!-- TEMPLATE NGX SPINNER-->
 <ngx-spinner style="width: 100vw; height: 100vh" bdColor="rgba(0,0,0,0.25)" size="medium" color="#fff"
-type="ball-clip-rotate" [fullScreen]="true">
-<p style="color: white"> Loading... </p>
+  type="ball-clip-rotate" [fullScreen]="true">
+  <p style="color: white"> Loading... </p>
 </ngx-spinner>
-  

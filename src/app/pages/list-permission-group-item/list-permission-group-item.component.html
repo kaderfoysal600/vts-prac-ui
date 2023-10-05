@@ -1,16 +1,37 @@
 <div class="section-1">
 
-  <button mat-raised-button color="primary" (click)="openEditControllerDialog()">Add New Permission Group Item</button>
-  <h1>Data of All Permission Group Item</h1>
+
   <div class="container">
+    <div class="section-1-top">
+      <div class="add">
+        <button mat-raised-button color="primary" (click)="openEditControllerDialog()"> <mat-icon>add</mat-icon> Add New
+          Permission Group Item</button>
+      </div>
+      <div class="export">
+        <div  class="export-container">
+          <button mat-raised-button color="primary" (click)="exportAsPdf()">Export As Pdf</button>
+        </div>
+        <div  class="export-container">
+          <!-- <button mat-raised-button color="warn" (click)="exportXlTable()">Export As XL</button> -->
+          <button mat-raised-button color="warn" (click)="exportAsXl()">Export As XL</button>
+        </div>
+
+
+     
+      </div>
+      <h1>Data of All Permission Group Item</h1>
+    </div>
     <div class="search">
-      <button mat-raised-button color="primary" (click)="onClearFilter()">Clear Filter</button>
+      <div class="clear">
+        <button mat-raised-button color="primary" (click)="onClearFilter()" [disabled]="clearFilter">
+          <mat-icon>clear</mat-icon> Clear Filter</button>
+      </div>
       <mat-form-field>
         <mat-label>Search by name</mat-label>
         <input matInput (keyup)="applyFilter($event)" placeholder="Ex. Api link" #input>
       </mat-form-field>
 
-      <mat-form-field >
+      <mat-form-field>
         <mat-label>Group</mat-label>
         <mat-select [(ngModel)]="selectedGroup">
           <mat-option *ngFor="let data of allPermissionGroup" [value]="data.id" (click)="onSelectGroup(data)">
@@ -19,20 +40,21 @@
         </mat-select>
       </mat-form-field>
 
-       
+
       <div class="sort">
         <button mat-raised-button color="primary" [matMenuTriggerFor]="menuCat">
           Status
           <mat-icon>arrow_drop_down</mat-icon>
         </button>
         <mat-menu #menuCat="matMenu">
-          <button *ngFor="let data of allStatus;" mat-menu-item (click)="filterData1(data)">
+          <button *ngFor="let data of allStatus;" [value]="data.value" mat-menu-item (click)="filterWithStatus(data)">
             {{data.viewValue}}
           </button>
         </mat-menu>
       </div>
 
-      <button mat-raised-button color="accent" (click)="itemSearchStart()">Search</button>
+      <button mat-raised-button color="accent" (click)="itemSearchStart()"
+        [disabled]="searchClicked"><mat-icon>search</mat-icon> Search</button>
     </div>
 
     <!-- <table>
@@ -60,8 +82,10 @@
 
 
 
-    <table #table mat-table matTableExporter [dataSource]="dataSource | paginate: { itemsPerPage: itemsPerPage, currentPage: page , totalItems:totalItems}"
-      matSort cdkDropList [cdkDropListData]="dataSource" (cdkDropListDropped)="dropTable($event)" class="example-list">
+    <table id="ExampleTable" #table mat-table matTableExporter
+      [dataSource]="dataSource | paginate: { itemsPerPage: itemsPerPage, currentPage: page , totalItems:totalItems}"
+      matSort cdkDropList [cdkDropListData]="dataSource" (cdkDropListDropped)="dragDropTable($event)"
+      class="example-list">
 
 
       <ng-container matColumnDef="id">
@@ -94,12 +118,12 @@
       </ng-container>
 
       <ng-container matColumnDef="action">
-        <th mat-header-cell *matHeaderCellDef>Action</th>
+        <th mat-header-cell *matHeaderCellDef>Actions</th>
         <td mat-cell class="edit-delete" *matCellDef="let row">
           <button class="edit-button" (click)="openEditControllerDialog(row)">
             <mat-icon>edit</mat-icon>
           </button>
-          <button class="delete-button" color="warn" (click)="deletePermissionGroupItem(row)">
+          <button class="delete-button" color="warn" (click)="deletePermissionGroupItem(row.id)">
             <mat-icon>delete_outline</mat-icon>
           </button>
 

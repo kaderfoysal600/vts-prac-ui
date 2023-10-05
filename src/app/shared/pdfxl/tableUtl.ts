@@ -6,7 +6,7 @@ export class TableUtil {
     popupWin.document.write(`
       <html>
         <head>
-          <title>Printed Data of all Users</title>
+          <title>Printed Data of ${name}</title>
           <style>
           .table {
             /* Add any table styling you want here */

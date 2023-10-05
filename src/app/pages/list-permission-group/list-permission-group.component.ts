@@ -222,9 +222,6 @@ export class ListPermissionGroupComponent implements OnInit{
     console.log('asaaaa')
   }
 
- 
-
-
    /**
    * ON DESTROY
    */

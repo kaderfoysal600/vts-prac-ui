@@ -1,10 +1,21 @@
 
 .section-1{
-    margin-top: 40px;
-    h1{
-      text-align: center;
-      margin-bottom: 15px;
+    margin-top: 10px;
+    .section-1-top{
+      padding:5px 20px;
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      flex-direction:row-reverse;
+      h1{
+        text-align: center;
+        margin-bottom: 0px;
+        font-size:18px;
+        font-weight:500;
+        float:left;
+      }
     }
+ 
    }
    .container{
     max-width: 1250px;
@@ -85,15 +96,30 @@
 
 .edit-button , .delete-button {
   border-radius: 50%; 
-  height: 35px;
-  width: 35px;
+  height: 25px;
+  width: 25px;
   display: flex;
   align-items: center;
   justify-content: center;
   color: #FFFF;
-  font-size: 7px;
+  font-size: 9px;
   border: none;
   cursor: pointer;
+  &:hover{
+    scale:1.4;
+    transition:0.2s linear all;
+  }
+  .material-icons {
+    font-size: 18px;
+  
+  }
+  .mat-icon-button i, .mat-icon-button .mat-icon {
+    line-height: 18px;
+  }
+  .mat-icon {
+    height: 18px;
+    width: 18px;
+  }
 
 }
 .edit-button{
@@ -107,21 +133,40 @@
   gap: 5px;
 }
 
-.material-icons {
-  font-size: 22px;
 
-}
-.mat-icon-button i, .mat-icon-button .mat-icon {
-  line-height: 22px;
-}
-.mat-icon {
-
-  height: 22px;
-  width: 22px;
-}
 
 .search{
   display: flex;
   align-items: center;
   justify-content: space-between;
+}
+
+
+.add{
+  .mat-flat-button.mat-primary, .mat-raised-button.mat-primary, .mat-fab.mat-primary, .mat-mini-fab.mat-primary {
+    background-color: #60c526;
+    font-weight:600!important;
+    font-family: 'Ubuntu', sans-serif;
+    font-size:14px;
+    line-height:32px;
+  }
+}
+
+.clear{
+  .mat-flat-button.mat-primary, .mat-raised-button.mat-primary, .mat-fab.mat-primary, .mat-mini-fab.mat-primary {
+    background-color: #FD6600;
+    font-weight:500!important;
+    font-family: 'Ubuntu', sans-serif;
+    line-height:28px;
+  }
+}
+
+::ng-deep tr.mat-row, tr.mat-footer-row {
+  height: 30px!important;
+}
+
+.export{
+  display: flex;
+  align-items: center;
+  gap: 5px;
 }

@@ -54,7 +54,7 @@ export class ListUserComponent implements OnInit {
 
   ngOnInit(): void {
     this.getAllRole();
-    this.getAllUser();
+    // this.getAllUser();
     this.getLoggedInUserRoleId();
     this.getLogedInUserPermission();
 
@@ -71,6 +71,7 @@ export class ListUserComponent implements OnInit {
           this.allRole = res
           console.log(res)
           this.spinner.hide();
+          this.getAllUser();
 
         } else {
           console.log('Error! Please try again.')
@@ -166,15 +167,15 @@ export class ListUserComponent implements OnInit {
   getAllUserWithRoleName(totalUser) {
     this.spinner.show();
     const usersWithRoleName = totalUser.map((user) => {
-      if(this.allRole){
-        const matchingRole = this.allRole.find((role) => user.role_id === role.id);
+   
+        const matchingRole = this.allRole?.find((role) => user.role_id === role.id);
         if (matchingRole) {
           this.spinner.hide();
           return { ...user, role_name: matchingRole.name };
         } else {
           return user;
         }
-      }
+      
   
     });
   
@@ -319,7 +320,7 @@ export class ListUserComponent implements OnInit {
         cell.parentNode.removeChild(cell);
       }
     });
-    TableUtil.exportToPdf(tableClone.outerHTML, 'exported_table');
+    TableUtil.exportToPdf(tableClone.outerHTML, 'All User');
   }
 
   exportXlTable() {
