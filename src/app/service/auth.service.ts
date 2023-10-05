@@ -52,6 +52,12 @@ export class AuthService {
   getAllPermissionGroupItem() {
     return this.http.get('http://localhost:3000/api/getPermissionGroupItems');
   }
+
+  
+  getAllPermissionGroupItemSearch(page, size, filterData: any) {
+    return this.http.post(`http://localhost:3000/api/getPermissionGroupItemsSearch?page=${page}&size=${size}`, filterData);
+  }
+
   getAllPermissionGroupItem1(page, size) {
     return this.http.get(`http://localhost:3000/api/getPermissionGroupItems1?page=${page}&size=${size}`);
   }

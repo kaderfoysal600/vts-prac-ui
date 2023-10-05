@@ -113,7 +113,8 @@ export class ListPermissionGroupItemComponent implements OnInit {
   }
 
   getAllPermissionGroup() {
-    this.subDataFive = this.authService.getAllPermissionGroup().subscribe({
+    this.subDataFive = 
+    this.authService.getAllPermissionGroup().subscribe({
       next: (res) => {
         if (res) {
           this.allPermissionGroup = res
@@ -155,7 +156,8 @@ export class ListPermissionGroupItemComponent implements OnInit {
   }
 
   addPermissionGroupItem(data: any) {
-    this.subDataTwo = this.authService.addPermissionGroupItem(data)
+    this.subDataTwo =
+     this.authService.addPermissionGroupItem(data)
       .subscribe({
         next: (res) => {
           console.log('res', res)
@@ -323,6 +325,33 @@ export class ListPermissionGroupItemComponent implements OnInit {
       console.log('z', z);
       searchVal = [...z];
     }
+
+
+    let x= {
+      filteredData: this.filteredData, 
+      groupId: this.groupId,
+      filterStatus: this.filterStatus
+    }
+
+    this.authService.getAllPermissionGroupItemSearch(1, this.itemsPerPage, x).subscribe({
+      next: (res) => {
+        if (res) {
+          console.log('allPermissionGroupItemSearch', res);
+
+
+        } else {
+          console.log('Error! Please try again.')
+        }
+      },
+      error: (err) => {
+        console.log(err)
+      }
+    })
+
+    
+
+    console.log('x', x);
+    
 
     console.log('searchVal', searchVal);
 
