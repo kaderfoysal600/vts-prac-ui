@@ -8,16 +8,16 @@
           Permission Group Item</button>
       </div>
       <div class="export">
-        <div  class="export-container">
+        <div class="export-container">
           <button mat-raised-button color="primary" (click)="exportAsPdf()">Export As Pdf</button>
         </div>
-        <div  class="export-container">
+        <div class="export-container">
           <!-- <button mat-raised-button color="warn" (click)="exportXlTable()">Export As XL</button> -->
           <button mat-raised-button color="warn" (click)="exportAsXl()">Export As XL</button>
         </div>
 
 
-     
+
       </div>
       <h1>Data of All Permission Group Item</h1>
     </div>
@@ -41,7 +41,7 @@
       </mat-form-field>
 
 
-      <div class="sort">
+      <!-- <div class="sort">
         <button mat-raised-button color="primary" [matMenuTriggerFor]="menuCat">
           Status
           <mat-icon>arrow_drop_down</mat-icon>
@@ -51,9 +51,19 @@
             {{data.viewValue}}
           </button>
         </mat-menu>
-      </div>
+      </div> -->
 
-      <button mat-raised-button color="accent" (click)="itemSearchStart()"
+
+      <mat-form-field>
+        <mat-label> Status</mat-label>
+        <mat-select [(ngModel)]="selectedStatus">
+          <mat-option *ngFor="let data of allStatus" [value]="data.value" (click)="filterWithStatus(data)">
+            {{data.viewValue}}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+
+      <button mat-raised-button color="accent" (click)="itemSearch(page)"
         [disabled]="searchClicked"><mat-icon>search</mat-icon> Search</button>
     </div>
 
@@ -129,14 +139,20 @@
 
         </td>
       </ng-container>
-      <tr class="header-row" mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-      <tr class="row" mat-row class="example-box" *matRowDef="let row; columns: displayedColumns" cdkDrag
-        [cdkDragData]="row"></tr>
+      <div *ngIf="!dragPossible">
+        <tr class="header-row" mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+        <tr class="row" mat-row class="example-box" *matRowDef="let row; columns: displayedColumns"></tr>
+      </div>
+      <div *ngIf="dragPossible">
+        <tr class="header-row" mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+        <tr class="row" mat-row class="example-box" *matRowDef="let row; columns: displayedColumns" cdkDrag
+          [cdkDragData]="row"></tr>
+      </div>
     </table>
 
     <!-- //peginatio -->
-    <div class="data-pagination">
-      <pagination-controls (pageChange)="getAllPermissionGroupItemExtra((page = $event))"></pagination-controls>
+    <div class="data-pagination" *ngIf="showPegination">
+      <pagination-controls (pageChange)="itemSearchStart((page = $event))"></pagination-controls>
     </div>
   </div>
 </div>

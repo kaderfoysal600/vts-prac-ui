@@ -30,11 +30,10 @@ export class ListPermissionGroupItemComponent implements OnInit {
 
 
   //store data for search 
-  filteredData:any;
-  groupId:any;
-  filterStatus:any;
-
-  showFilterStatus:any;
+  filteredData: any;
+  groupId: any;
+  filterStatus: any;
+  showFilterStatus: any;
 
   //show search data 
 
@@ -43,8 +42,8 @@ export class ListPermissionGroupItemComponent implements OnInit {
   page: number = 1;
   itemsPerPage = 5;
   totalItems: any;
-  currPage:number = 1;
-
+  currPage: number = 1;
+  showPegination = true;
 
   dataSource
   displayedColumns = ['id', 'group', 'name', 'permission', 'weight', 'status', 'action'];
@@ -56,10 +55,12 @@ export class ListPermissionGroupItemComponent implements OnInit {
   // @ViewChild(MatSort) sort: MatSort;
   @ViewChild('table') table: MatTable<any>;
   @ViewChild('input', { static: false }) input: ElementRef;
-  selectedGroup:any;
+  selectedGroup: any;
+  selectedStatus: any;
 
 
-
+  //dragable
+  dragPossible = false;
   // Subscriptions
   private subDataOne: Subscription;
   private subDataTwo: Subscription;
@@ -81,7 +82,7 @@ export class ListPermissionGroupItemComponent implements OnInit {
 
   ngOnInit(): void {
     this.loggedInUserRolePermission = this.userDataService.getLoggedInUserRolePermission();
-    this.getAllPermissionGroupItemExtra(null)
+    this.itemSearchStart(null)
 
   }
 
@@ -113,28 +114,28 @@ export class ListPermissionGroupItemComponent implements OnInit {
   }
 
   getAllPermissionGroup() {
-    this.subDataFive = 
-    this.authService.getAllPermissionGroup().subscribe({
-      next: (res) => {
-        if (res) {
-          this.allPermissionGroup = res
-          this.allPermissionGroupItem.forEach((item1: any) => {
-            this.allPermissionGroup.forEach((item) => {
-              if (item.id === item1.permission_group_id) {
-                item1.permission_group_name = item.name
-              }
+    this.subDataFive =
+      this.authService.getAllPermissionGroup().subscribe({
+        next: (res) => {
+          if (res) {
+            this.allPermissionGroup = res
+            this.allPermissionGroupItem.forEach((item1: any) => {
+              this.allPermissionGroup.forEach((item) => {
+                if (item.id === item1.permission_group_id) {
+                  item1.permission_group_name = item.name
+                }
+              });
             });
-          });
-          // console.log(res)
+            // console.log(res)
 
-        } else {
-          console.log('Error! Please try again.')
+          } else {
+            console.log('Error! Please try again.')
+          }
+        },
+        error: (err) => {
+          console.log(err)
         }
-      },
-      error: (err) => {
-        console.log(err)
-      }
-    })
+      })
   }
 
   public openEditControllerDialog(data?: any) {
@@ -157,22 +158,22 @@ export class ListPermissionGroupItemComponent implements OnInit {
 
   addPermissionGroupItem(data: any) {
     this.subDataTwo =
-     this.authService.addPermissionGroupItem(data)
-      .subscribe({
-        next: (res) => {
-          console.log('res', res)
-          if (res) {
-            console.log('Permission Group Item added successfully', res)
-            this.uiService.success('Permission Group Item added successfully');
-            this.getAllPermissionGroupItemExtra(this.currPage)
-          } else {
-            console.log('Error! Please try again.')
+      this.authService.addPermissionGroupItem(data)
+        .subscribe({
+          next: (res) => {
+            console.log('res', res)
+            if (res) {
+              console.log('Permission Group Item added successfully', res)
+              this.uiService.success('Permission Group Item added successfully');
+              this.getAllPermissionGroupItemExtra(this.currPage)
+            } else {
+              console.log('Error! Please try again.')
+            }
+          },
+          error: (err) => {
+            console.log(err)
           }
-        },
-        error: (err) => {
-          console.log(err)
-        }
-      })
+        })
   }
 
   public updatePermissionGroupItem(id: string, data: any) {
@@ -194,7 +195,7 @@ export class ListPermissionGroupItemComponent implements OnInit {
     console.log('id', id)
     this.subDataFour = this.authService.deletePermissionGroupItem(id).subscribe({
       next: (res) => {
-        console.log('res',res);
+        console.log('res', res);
         this.uiService.success('Permission Group Item deleted successfully');
         if (res) {
           this.getAllPermissionGroupItemExtra(this.currPage)
@@ -205,8 +206,6 @@ export class ListPermissionGroupItemComponent implements OnInit {
       },
     });
   }
-
-
 
   dragDropTable(event: CdkDragDrop<any[]>) {
     console.log('event', event);
@@ -232,7 +231,7 @@ export class ListPermissionGroupItemComponent implements OnInit {
   }
 
 
-//select search field
+  //select search field
 
   onSelectGroup(e) {
     this.groupId = e.id
@@ -254,7 +253,7 @@ export class ListPermissionGroupItemComponent implements OnInit {
     }
 
   }
-  filterWithStatus(data:any) {
+  filterWithStatus(data: any) {
     this.filterStatus = data.value;
     if (this.filterStatus === 0 || this.filterStatus === 1) {
       this.searchClicked = false;
@@ -264,80 +263,47 @@ export class ListPermissionGroupItemComponent implements OnInit {
     }
   }
 
- 
 
-//search button clicked
 
-  itemSearchStart() {
+  //search button clicked
+
+  itemSearch(p) {
+    let x = p
+    if (p > 1) {
+      x = 1;
+    }
+    console.log('p', p);
+
+    this.itemSearchStart(x);
+    this.page = 1
+  }
+  itemSearchStart(page) {
     this.searchClicked = true;
     this.updateDataSource(this.allPermissionGroupItem)
-    this.clearFilter = false;
-    let searchVal = [];
-    if (this.filteredData) {
-      let x = this.dataSource.filter((item) => item.name.toLowerCase().includes(this.filteredData));
-      searchVal = [...x];
-      if (this.groupId) {
-        let y = searchVal.filter((item1) => this.groupId === item1?.permission_group_id)
-        searchVal = [...y];
-        console.log('this.filterStatus', this.filterStatus);
-
-        if (this.filterStatus === 0 || this.filterStatus === 1) {
-          let z = searchVal.filter((v) => v.status === this.filterStatus);
-          console.log('z', z);
-          searchVal = [...z];
-        }
-      }
-    }
-    if (this.groupId && this.filterStatus === 0 || this.filterStatus === 1 && !this.filteredData) {
-      let y = this.dataSource.filter((item) => {
-
-        return this.groupId === item?.permission_group_id
-      })
-      console.log('y', y);
-      searchVal = [...y];
-
-      if (this.filterStatus === 0 || this.filterStatus === 1) {
-        let z = searchVal.filter((v) => v.status === this.filterStatus);
-        console.log('z', z);
-        searchVal = [...z];
-      }
-    }
-    if (this.groupId && !(this.filterStatus === 0 || this.filterStatus === 1) && !this.filteredData) {
-      let y = this.dataSource.filter((item) => {
-
-        return this.groupId === item?.permission_group_id
-      })
-      console.log('y', y);
-      searchVal = [...y];
-    }
-
-    if ((this.filterStatus === 0 || this.filterStatus === 1) && !this.groupId && !this.filteredData) {
-      let z = this.dataSource.filter((v) => v.status === this.filterStatus);
-      console.log('z', z);
-      searchVal = [...z];
-    }
-
-
-    if ((this.filterStatus === 0 || this.filterStatus === 1) && this.filteredData && !this.groupId) {
-      let x = this.dataSource.filter((item) => item.name.toLowerCase().includes(this.filteredData));
-      searchVal = [...x];
-      let z = searchVal.filter((v) => v.status === this.filterStatus);
-      console.log('z', z);
-      searchVal = [...z];
-    }
-
-
-    let x= {
-      filteredData: this.filteredData, 
+    // this.clearFilter = false;
+    let x = {
+      filteredData: this.filteredData,
       groupId: this.groupId,
       filterStatus: this.filterStatus
     }
 
-    this.authService.getAllPermissionGroupItemSearch(1, this.itemsPerPage, x).subscribe({
+    this.authService.getAllPermissionGroupItemSearch(page, this.itemsPerPage, x).subscribe({
       next: (res) => {
         if (res) {
           console.log('allPermissionGroupItemSearch', res);
+          this.allPermissionGroupItem = res['data']
+          this.dragPossible = res['isDrag']
+          this.getAllPermissionGroup()
+          if (res['totalData'] !== 0) {
+            this.totalItems = res['totalData'];
+          } else if (res['totalData'] === 0) {
+            this.showPegination = false;
+            console.log('this.showPegination ', this.showPegination)
+          }
 
+
+          this.updateDataSource(this.allPermissionGroupItem)
+          this.clearFilter = false;
 
         } else {
           console.log('Error! Please try again.')
@@ -348,31 +314,26 @@ export class ListPermissionGroupItemComponent implements OnInit {
       }
     })
 
-    
+
 
     console.log('x', x);
-    
-
-    console.log('searchVal', searchVal);
-
-    this.updateDataSource(searchVal);
-
-    // Clear the input field value after searching
-    const inputElement: HTMLInputElement = this.input.nativeElement;
-    inputElement.value = '';
-    this.filteredData = '';
-    this.groupId = '';
-    this.selectedGroup = '';
-    this.filterStatus = '';
   }
 
   onClearFilter() {
     this.groupId = '';
     this.filteredData = '';
     this.selectedGroup = '';
+    this.selectedStatus = '';
     this.filterStatus = '';
+    const inputElement: HTMLInputElement = this.input.nativeElement;
+    inputElement.value = '';
 
-    this.updateDataSource(this.allPermissionGroupItem)
+    console.log('this.allPermissionGroupItem', this.allPermissionGroupItem)
+    this.itemSearchStart(null);
+    this.currPage = 1;
+    this.page = 1;
+    this.showPegination = true;
+
     console.log('filter data cleared')
     this.clearFilter = true;
   }
@@ -380,6 +341,7 @@ export class ListPermissionGroupItemComponent implements OnInit {
   updateDataSource(newData: any[]) {
     // this.dataSource.paginator = this.page;
     this.dataSource = newData;
+    console.log('this.dataSource ', this.dataSource)
     // Notify the MatTable that the data has changed
     this.changeDetectorRef.detectChanges();
   }
@@ -388,109 +350,109 @@ export class ListPermissionGroupItemComponent implements OnInit {
 
 
 
-// export pdf xl 
+  // export pdf xl 
 
 
-exportAsPdf() {
-  const tableClone = document.getElementById('ExampleTable').cloneNode(true) as Element;
-  const actionCells = tableClone.querySelectorAll('.edit-delete');
-  actionCells.forEach(cell => cell.parentNode.removeChild(cell));
+  exportAsPdf() {
+    const tableClone = document.getElementById('ExampleTable').cloneNode(true) as Element;
+    const actionCells = tableClone.querySelectorAll('.edit-delete');
+    actionCells.forEach(cell => cell.parentNode.removeChild(cell));
 
-  // Remove header cells for non-exportable columns
-  const headerCells = tableClone.querySelectorAll('th');
-  console.log('headerCells', headerCells)
-  headerCells.forEach((cell, index) => {
-    if (cell.innerText === 'Actions') {
-      cell.parentNode.removeChild(cell);
-    }
-  });
-  TableUtil.exportToPdf(tableClone.outerHTML, 'Permission Group Item');
-}
-
-
-exportAsXl() {
-  const mData = this.allPermissionGroupItem.map((m) => {
-
-    return {
-      Id: m.id,
-      Group: m.permission_group_name,
-      Name: m.name,
-      permission: m.permission ? m.permission : 'n/a',
-      weight: m.weight,
-      // Mobile: m.mobile ? m.mobile : 'n/a',
-    };
-  })
-
-  // Define column widths
-  const columnWidths = [
-    { wch: 7 },  // Width of the 'name' column
-    { wch: 14 },  // Width of the 'roleName' column
-    { wch: 20 },  // Width of the 'email' column
-    { wch: 18 },  // Width of the 'gender' column
-    { wch: 5 },  // Width of the 'mobile' column
-  ];
-
-
-  console.log('mData', mData);
-
-  // EXPORT XLSX with specified column widths
-  const ws: XLSX.WorkSheet = XLSX.utils.json_to_sheet(mData);
-  ws['!cols'] = columnWidths; // Set column widths
-
-  // Define styles for bold headers
-  const headerStyle = {
-    alignment: {
-      vertical: 'left',
-      horizontal: 'left',
-      wrapText: false, 
-    },
-    font: {
-      name: 'arial',
-      sz: "13",
-    },
-
-    border: {
-      right: {
-        style: 'thin',
-        color: '000000',
-      },
-      left: {
-        style: 'thin',
-        color: '000000',
-      },
-      bottom: {
-        style: 'thin',
-        color: '000000',
-      },
-    },
-    fill: {
-      patternType: 'solid',
-      fgColor: { rgb: 'b2b2b2' },
-      bgColor: { rgb: 'b2b2b2' },
-    }
-
-
-  };
-
-  // Apply styles to the header row
-  ws['A1'].s = headerStyle;
-  ws['B1'].s = headerStyle;
-  ws['C1'].s = headerStyle;
-  ws['D1'].s = headerStyle;
-  ws['E1'].s = headerStyle;
-
-  ws['!rows'] = [{ hpx: 20 }];
-
-  const rowCount = mData.length;
-  for (let rowIndex = 1; rowIndex <= rowCount; rowIndex++) {
-    ws['!rows'][rowIndex] = { hpx: 18 }; // Set the height of each row (excluding the header) to 20 pixels
+    // Remove header cells for non-exportable columns
+    const headerCells = tableClone.querySelectorAll('th');
+    console.log('headerCells', headerCells)
+    headerCells.forEach((cell, index) => {
+      if (cell.innerText === 'Actions') {
+        cell.parentNode.removeChild(cell);
+      }
+    });
+    TableUtil.exportToPdf(tableClone.outerHTML, 'Permission Group Item');
   }
-  // Add more header styles for additional columns as needed
 
-  const wb: XLSX.WorkBook = XLSX.utils.book_new();
-  XLSX.utils.book_append_sheet(wb, ws, 'Data');
-  XLSX.writeFile(wb, `permission_group_items.xlsx`);
-}
+
+  exportAsXl() {
+    const mData = this.allPermissionGroupItem.map((m) => {
+
+      return {
+        Id: m.id,
+        Group: m.permission_group_name,
+        Name: m.name,
+        permission: m.permission ? m.permission : 'n/a',
+        weight: m.weight,
+        // Mobile: m.mobile ? m.mobile : 'n/a',
+      };
+    })
+
+    // Define column widths
+    const columnWidths = [
+      { wch: 7 },  // Width of the 'name' column
+      { wch: 14 },  // Width of the 'roleName' column
+      { wch: 20 },  // Width of the 'email' column
+      { wch: 18 },  // Width of the 'gender' column
+      { wch: 5 },  // Width of the 'mobile' column
+    ];
+
+
+    console.log('mData', mData);
+
+    // EXPORT XLSX with specified column widths
+    const ws: XLSX.WorkSheet = XLSX.utils.json_to_sheet(mData);
+    ws['!cols'] = columnWidths; // Set column widths
+
+    // Define styles for bold headers
+    const headerStyle = {
+      alignment: {
+        vertical: 'left',
+        horizontal: 'left',
+        wrapText: false,
+      },
+      font: {
+        name: 'arial',
+        sz: "13",
+      },
+
+      border: {
+        right: {
+          style: 'thin',
+          color: '000000',
+        },
+        left: {
+          style: 'thin',
+          color: '000000',
+        },
+        bottom: {
+          style: 'thin',
+          color: '000000',
+        },
+      },
+      fill: {
+        patternType: 'solid',
+        fgColor: { rgb: 'b2b2b2' },
+        bgColor: { rgb: 'b2b2b2' },
+      }
+
+
+    };
+
+    // Apply styles to the header row
+    ws['A1'].s = headerStyle;
+    ws['B1'].s = headerStyle;
+    ws['C1'].s = headerStyle;
+    ws['D1'].s = headerStyle;
+    ws['E1'].s = headerStyle;
+
+    ws['!rows'] = [{ hpx: 20 }];
+
+    const rowCount = mData.length;
+    for (let rowIndex = 1; rowIndex <= rowCount; rowIndex++) {
+      ws['!rows'][rowIndex] = { hpx: 18 }; // Set the height of each row (excluding the header) to 20 pixels
+    }
+    // Add more header styles for additional columns as needed
+
+    const wb: XLSX.WorkBook = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(wb, ws, 'Data');
+    XLSX.writeFile(wb, `permission_group_items.xlsx`);
+  }
   /**
   * ON DESTROY
   */

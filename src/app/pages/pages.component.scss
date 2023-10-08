@@ -24,7 +24,7 @@ header {
                 text-decoration: none;
                 font-size: 16px;
                 border-radius: 3px;
-                transition: all 0.3s linear;
+                // transition: all 0.3s linear;
 
                 &:hover {
                     color: #FE013E;
@@ -46,4 +46,81 @@ header {
 .active {
     background-color: #FFFF;
     color: #FE013E !important;
+}
+
+
+
+// submenu
+.submenu-parent{
+    position: relative;
+}
+
+.submenu, .submenu2, .submenu3{
+    position: absolute;
+    top: 100%;
+    left:0;
+    z-index: 10;
+    visibility: hidden;
+    background-color: #6d6a6a;
+    border: 1px solid #6d6a6a;
+    box-sizing: border-box;
+    padding: 0px 0px!important;
+    li{
+        padding: 5px 0px!important;
+        margin-bottom: 0px!important;
+    }
+  
+    a{
+        font-size: 16px;
+        padding: 5px 20px!important;
+        border-radius: 0px!important;
+        &:hover{
+            background-color: #FFF;
+            color: #0F0E24!important;
+        }
+    }
+
+}
+.submenu-parent:hover .submenu{
+    display: flex!important;
+    flex-direction: column;
+    gap: 10px;
+    visibility: visible;
+}
+
+// submenu2
+.submenu-2-parent{
+    position: relative;
+}
+.submenu2{
+  position: absolute;
+  top: 0px;
+  left: 100%;
+  z-index: 100;
+  visibility: hidden;
+}
+
+.submenu-2-parent:hover .submenu2{
+display: flex!important;
+flex-direction: column;
+visibility: visible;
+}
+
+// submenu3
+
+.submenu-3-parent{
+    position: relative;
+}
+.submenu3{
+  position: absolute;
+  top: 0px;
+  left: 100%;
+  z-index: 100;
+  visibility: hidden;
+}
+
+.submenu-3-parent:hover .submenu3{
+display: flex!important;
+flex-direction: column;
+visibility: visible;
 }
