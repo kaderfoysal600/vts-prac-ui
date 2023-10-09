@@ -1,8 +1,9 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { Router } from '@angular/router';
 import { UserDataService } from '../shared/service/user-data.service';
 import { Subscription } from 'rxjs';
 import { AuthService } from '../service/auth.service';
+import { MatMenuTrigger } from '@angular/material/menu';
 
 @Component({
   selector: 'app-pages',
@@ -10,6 +11,7 @@ import { AuthService } from '../service/auth.service';
   styleUrls: ['./pages.component.scss']
 })
 export class PagesComponent implements OnInit {
+
   loggedInEmail: any;
 
   loggedInUserRolePermission: any;
@@ -70,3 +72,6 @@ export class PagesComponent implements OnInit {
   }
 
 }
+
+
+

@@ -1,12 +1,11 @@
 header {
     background-color: #0F0E24;
-    height: 60px;
-    background-color: #0F0E24;
-    height: 60px;
+    height: 30px;
     position: sticky;
     top: 0;
     left: 0;
     width: 100%;
+    padding: 5px 0px;
 
     ul {
         display: flex;
@@ -14,20 +13,21 @@ header {
         justify-content: center;
         gap: 15px;
         list-style: none;
-        margin: 0px;
-        padding: 20px 0px 0px;
+        margin: auto;
+        // padding: 20px 0px 0px;
 
         li {
             a {
                 color: #FFFF;
-                padding: 5px 10px;
+                padding: 3px 8px;
                 text-decoration: none;
-                font-size: 16px;
+                font-size: 15px;
                 border-radius: 3px;
                 // transition: all 0.3s linear;
 
                 &:hover {
-                    color: #FE013E;
+                    background-color: #FFFF;
+                    color: #0F0E24 !important;
                 }
             }
         }
@@ -46,7 +46,7 @@ header {
 
 .active {
     background-color: #FFFF;
-    color: #FE013E !important;
+    color: #0F0E24 !important;
 }
 
 
@@ -75,15 +75,15 @@ header {
     position: absolute;
     top: 100%;
     left: 0;
-    z-index: 10000;
+    z-index: 10000!important;
     visibility: hidden;
-    background-color: #6d6a6a;
-    border: 1px solid #6d6a6a;
+    background-color: #0F0E24;
     box-sizing: border-box;
     padding: 0px 0px !important;
     gap: 0px !important;
     width: 100%;
-    min-width: 100px;
+    height: auto;
+    min-width: 120px;
     text-align: center;
     display: flex;
     align-items: flex-end;
@@ -92,7 +92,7 @@ header {
     border-radius: 3px;
 
     li {
-        padding: 5px 0px !important;
+        padding: 0px !important;
         margin-bottom: 0px !important;
         width: 100%;
     }
@@ -103,10 +103,15 @@ header {
         border-radius: 0px !important;
         width: 100%;
         display: block;
+        border-bottom: 1px solid #FFFF;
+        border-left: 1px solid transparent;
+        border-right: 1px solid transparent;
 
         &:hover {
             background-color: #FFF;
             color: #0F0E24 !important;
+            border-left: 1px solid #0F0E24;
+            border-right: 1px solid #0F0E24;
         }
     }
 
@@ -122,7 +127,7 @@ header {
     position: absolute;
     top: 0px;
     left: 100%;
-    z-index: 100;
+    z-index: 10000;
     visibility: hidden;
 }
 
@@ -136,20 +141,10 @@ header {
     position: absolute;
     top: 0px;
     left: 100%;
-    z-index: 100;
+    z-index: 10000;
     visibility: hidden;
 }
 
 .submenu-3-parent:hover .submenu3 {
     visibility: visible;
 }
-
-
-// ::ng-deep .mat-icon {
-//     height: 16px!important;
-//     width: 16px!important;
-// }
-
-// ::ng-deep .material-icons {
-//     font-size: 16px!important;
-// }

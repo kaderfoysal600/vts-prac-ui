@@ -9,11 +9,10 @@
       </div>
       <div class="export">
         <div class="export-container">
-          <button mat-raised-button color="primary" (click)="exportAsPdf()">Export As Pdf</button>
+          <button class="pdf"  (click)="exportAsPdf()">Export As Pdf</button>
         </div>
         <div class="export-container">
-          <!-- <button mat-raised-button color="warn" (click)="exportXlTable()">Export As XL</button> -->
-          <button mat-raised-button color="warn" (click)="exportAsXl()">Export As XL</button>
+          <button class="xl" (click)="exportAsXl()">Export As XL</button>
         </div>
 
 
@@ -26,10 +25,9 @@
         <button mat-raised-button color="primary" (click)="onClearFilter()" [disabled]="clearFilter">
           <mat-icon>clear</mat-icon> Clear Filter</button>
       </div>
-      <mat-form-field>
-        <mat-label>Search by name</mat-label>
-        <input matInput (keyup)="applyFilter($event)" placeholder="Ex. Api link" #input>
-      </mat-form-field>
+
+        <input  class="styled-input" (keyup)="applyFilter($event)" placeholder="Ex. Api link" #input>
+
 
       <mat-form-field>
         <mat-label>Group</mat-label>
@@ -41,17 +39,6 @@
       </mat-form-field>
 
 
-      <!-- <div class="sort">
-        <button mat-raised-button color="primary" [matMenuTriggerFor]="menuCat">
-          Status
-          <mat-icon>arrow_drop_down</mat-icon>
-        </button>
-        <mat-menu #menuCat="matMenu">
-          <button *ngFor="let data of allStatus;" [value]="data.value" mat-menu-item (click)="filterWithStatus(data)">
-            {{data.viewValue}}
-          </button>
-        </mat-menu>
-      </div> -->
 
 
       <mat-form-field>

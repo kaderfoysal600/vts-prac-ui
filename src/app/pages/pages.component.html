@@ -1,13 +1,15 @@
 <header>
     <ul>
+
         <li class="submenu-parent">
             <a routerLink="/list-user" class="sub" routerLinkActive="active">User
                 <mat-icon>keyboard_arrow_down</mat-icon>
                 <ul class="submenu">
                     <li><a href="">user1</a></li>
 
-                    <li class="submenu-2-parent"><a href="" class="sub">user2 <mat-icon>keyboard_arrow_right</mat-icon>
+                    <li class="submenu-2-parent">
 
+                        <a href="" class="sub">user2 <mat-icon>keyboard_arrow_right</mat-icon>
                             <ul class="submenu2">
                                 <li><a href="">userA</a></li>
                                 <li><a href="">userB</a></li>
@@ -26,11 +28,16 @@
                                     <a href="">userD</a>
                                 </li>
                             </ul>
-                        </a></li>
+                        </a>
+
+
+                    </li>
+
                     <li><a href="">user3</a></li>
                     <li><a href="">user4</a></li>
                 </ul>
             </a>
+         
         </li>
         <li>
             <a routerLink="/list-role" routerLinkActive="active">Role</a>
@@ -42,12 +49,16 @@
             <a routerLink="/list-permission-group-item" routerLinkActive="active">Permission Group Item</a>
         </li>
 
+
         <li>
             <a style="cursor:pointer" (click)="onLogOut()"> Logout</a>
         </li>
         <h3>Hello - {{loggedInEmail}}</h3>
     </ul>
 </header>
+
+
+
 
 
 <router-outlet></router-outlet>

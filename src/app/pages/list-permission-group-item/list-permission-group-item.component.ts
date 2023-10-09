@@ -88,30 +88,30 @@ export class ListPermissionGroupItemComponent implements OnInit {
 
   //CURD of All Permission group item
 
-  getAllPermissionGroupItemExtra(page: any) {
-    this.currPage = page;
-    this.spinner.show();
-    this.subDataOne = this.authService.getAllPermissionGroupItem1(page, this.itemsPerPage).subscribe({
-      next: (res) => {
-        if (res) {
-          this.spinner.hide();
-          console.log('allPermissionGroupItem', res);
-          this.allPermissionGroupItem = res['data'];
-          this.getAllPermissionGroup()
-          this.totalItems = res['totalData'];
-          this.updateDataSource(this.allPermissionGroupItem)
+  // getAllPermissionGroupItemExtra(page: any) {
+  //   this.currPage = page;
+  //   this.spinner.show();
+  //   this.subDataOne = this.authService.getAllPermissionGroupItem1(page, this.itemsPerPage).subscribe({
+  //     next: (res) => {
+  //       if (res) {
+  //         this.spinner.hide();
+  //         console.log('allPermissionGroupItem', res);
+  //         this.allPermissionGroupItem = res['data'];
+  //         this.getAllPermissionGroup()
+  //         this.totalItems = res['totalData'];
+  //         this.updateDataSource(this.allPermissionGroupItem)
 
-        } else {
-          this.spinner.hide();
-          console.log('Error! Please try again.')
-        }
-      },
-      error: (err) => {
-        this.spinner.hide();
-        console.log(err)
-      }
-    })
-  }
+  //       } else {
+  //         this.spinner.hide();
+  //         console.log('Error! Please try again.')
+  //       }
+  //     },
+  //     error: (err) => {
+  //       this.spinner.hide();
+  //       console.log(err)
+  //     }
+  //   })
+  // }
 
   getAllPermissionGroup() {
     this.subDataFive =
@@ -165,7 +165,7 @@ export class ListPermissionGroupItemComponent implements OnInit {
             if (res) {
               console.log('Permission Group Item added successfully', res)
               this.uiService.success('Permission Group Item added successfully');
-              this.getAllPermissionGroupItemExtra(this.currPage)
+              this.itemSearchStart(this.currPage)
             } else {
               console.log('Error! Please try again.')
             }
@@ -183,7 +183,7 @@ export class ListPermissionGroupItemComponent implements OnInit {
         console.log(res);
         this.uiService.success('Permission Group Item Updated successfully');
         if (res) {
-          this.getAllPermissionGroupItemExtra(this.currPage)
+          this.itemSearchStart(this.currPage)
         }
       },
       error: (err) => {
@@ -199,7 +199,7 @@ export class ListPermissionGroupItemComponent implements OnInit {
         console.log('res', res);
         this.uiService.success('Permission Group Item deleted successfully');
         if (res) {
-          this.getAllPermissionGroupItemExtra(this.currPage)
+          this.itemSearchStart(this.currPage)
         }
       },
       error: (err) => {
@@ -254,6 +254,8 @@ export class ListPermissionGroupItemComponent implements OnInit {
   //select search field
 
   onSelectGroup(e) {
+    console.log('data', e);
+    
     this.groupId = e.id
     if (this.groupId) {
       this.searchClicked = false;
