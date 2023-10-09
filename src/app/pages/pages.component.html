@@ -1,16 +1,18 @@
 <header>
     <ul>
-        <li>
-            <a routerLink="/list-user" class="submenu-parent" routerLinkActive="active">User
+        <li class="submenu-parent">
+            <a routerLink="/list-user" class="sub" routerLinkActive="active">User
+                <mat-icon>keyboard_arrow_down</mat-icon>
                 <ul class="submenu">
                     <li><a href="">user1</a></li>
-                    <li><a href="" class="submenu-2-parent">user2
+
+                    <li class="submenu-2-parent"><a href="" class="sub">user2 <mat-icon>keyboard_arrow_right</mat-icon>
 
                             <ul class="submenu2">
                                 <li><a href="">userA</a></li>
                                 <li><a href="">userB</a></li>
-                                <li>
-                                    <a href="" class="submenu-3-parent">userC
+                                <li class="submenu-3-parent">
+                                    <a href="" class="sub">userC <mat-icon>keyboard_arrow_right</mat-icon>
                                         <ul class="submenu3">
                                             <li><a href="">userX</a></li>
                                             <li><a href="">userY</a></li>
@@ -19,7 +21,7 @@
                                         </ul>
                                     </a>
                                 </li>
-                              
+
                                 <li>
                                     <a href="">userD</a>
                                 </li>
@@ -39,18 +41,12 @@
         <li>
             <a routerLink="/list-permission-group-item" routerLinkActive="active">Permission Group Item</a>
         </li>
-        <!-- <li>
-            <a routerLink="/list-role-permission" routerLinkActive="active"> Role Permission</a>
-        </li> -->
-
 
         <li>
             <a style="cursor:pointer" (click)="onLogOut()"> Logout</a>
         </li>
         <h3>Hello - {{loggedInEmail}}</h3>
     </ul>
-
-
 </header>
 
 

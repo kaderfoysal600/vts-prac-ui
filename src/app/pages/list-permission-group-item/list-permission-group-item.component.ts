@@ -13,6 +13,7 @@ import { UserDataService } from 'src/app/shared/service/user-data.service';
 import { TableUtil } from 'src/app/shared/pdfxl/tableUtl';
 import { TableXl } from 'src/app/shared/pdfxl/tableXl';
 import * as XLSX from 'xlsx-js-style';
+import { MatSort } from '@angular/material/sort';
 
 @Component({
   selector: 'app-list-permission-group-item',
@@ -46,13 +47,13 @@ export class ListPermissionGroupItemComponent implements OnInit {
   showPegination = true;
 
   dataSource
-  displayedColumns = ['id', 'group', 'name', 'permission', 'weight', 'status', 'action'];
+  displayedColumns = ['id','group', 'name', 'permission', 'weight', 'status', 'action'];
   allStatus: any[] = [
     { value: 1, viewValue: 'Active' },
     { value: 0, viewValue: 'Inactive' }
   ];
 
-  // @ViewChild(MatSort) sort: MatSort;
+  @ViewChild(MatSort) sort: MatSort;
   @ViewChild('table') table: MatTable<any>;
   @ViewChild('input', { static: false }) input: ElementRef;
   selectedGroup: any;
@@ -83,7 +84,6 @@ export class ListPermissionGroupItemComponent implements OnInit {
   ngOnInit(): void {
     this.loggedInUserRolePermission = this.userDataService.getLoggedInUserRolePermission();
     this.itemSearchStart(null)
-
   }
 
   //CURD of All Permission group item
@@ -177,7 +177,8 @@ export class ListPermissionGroupItemComponent implements OnInit {
   }
 
   public updatePermissionGroupItem(id: string, data: any) {
-    this.subDataThree = this.authService.updatePermissionGroupItem(id, data).subscribe({
+    this.subDataThree = 
+    this.authService.updatePermissionGroupItem(id, data).subscribe({
       next: (res) => {
         console.log(res);
         this.uiService.success('Permission Group Item Updated successfully');
@@ -218,12 +219,31 @@ export class ListPermissionGroupItemComponent implements OnInit {
 
     this.dataSource.map((d, index) => {
       if (d === event.item.data) {
-        d.weight = event.currentIndex + 1; // Set the weight based on the new position
+        d.weight = event.currentIndex + 1; 
+        this.authService.updatePermissionGroupItem(d.id, d).subscribe({
+          next: (res) => {
+            console.log(res);
+          },
+          error: (err) => {
+            console.log(err);
+          },
+        });
+        
+        // Set the weight based on the new position
       } else if (index >= event.currentIndex) {
         // Update the weight of elements after the dragged item
         d.weight = d.weight + 1; // Adjust the weight accordingly
+        this.authService.updatePermissionGroupItem(d.id, d).subscribe({
+          next: (res) => {
+            console.log(res);
+          },
+          error: (err) => {
+            console.log(err);
+          },
+        });
       }
     });
+
     console.log('UpdatedData', this.dataSource);
 
 
@@ -280,7 +300,6 @@ export class ListPermissionGroupItemComponent implements OnInit {
   itemSearchStart(page) {
     this.searchClicked = true;
     this.updateDataSource(this.allPermissionGroupItem)
-    // this.clearFilter = false;
     let x = {
       filteredData: this.filteredData,
       groupId: this.groupId,
@@ -313,8 +332,6 @@ export class ListPermissionGroupItemComponent implements OnInit {
         console.log(err)
       }
     })
-
-
 
     console.log('x', x);
   }
